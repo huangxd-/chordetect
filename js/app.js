@@ -15,7 +15,13 @@ var app = new Vue({
         keys: [],
         holdPedal: false,
         pageWidth: window.innerWidth,
-        keyWidth: null
+        keyWidth: null,
+        blackKeyWidth: null,
+        vf: null,
+        score: null,
+        system: null,
+        lowNotes: null,
+        upNotes: null,
     },
     created: function () {
 
@@ -33,6 +39,38 @@ var app = new Vue({
                 this.selectedMidiInputId = WebMidi.inputs[0].id;
             }
         });
+
+        const { Factory } = Vex.Flow;
+
+        this.vf = new Factory({
+            renderer: { elementId: 'scorePanel', width: 500, height: 500 },
+        });
+
+        this.score = this.vf.EasyScore();
+        this.system = this.vf.System();
+
+        this.lowNotes = this.score.notes('(C4 D#4 E4 G4 Bb4)/w')
+        this.upNotes = this.score.notes('(C2 E2 G3 Bb3)/1', {clef:'bass'})
+
+        this.system
+            .addStave({
+                voices: [
+                    this.score.voice(this.lowNotes),
+                ],
+            })
+            .addClef('treble')
+
+        this.system
+            .addStave({
+                voices: [
+                    this.score.voice(this.upNotes),
+                ],
+            })
+            .addClef('bass')
+
+        this.system.addConnector()
+
+        this.vf.draw();
     },
     watch: {
         selectedMidiInputId(newMidiInputId) {
@@ -80,6 +118,13 @@ var app = new Vue({
         liWidth: function() {
             this.keyWidth = `${(this.pageWidth - 50) / ((this.nbKeys + 1) / 12/*keys/octaves*/ * 7/*white keys/octave*/)}`
             return `${this.keyWidth}px`;
+        },
+        blackLiWidth: function() {
+            this.blackKeyWidth = `${(this.keyWidth) * (20/ 36)}`
+            return `${this.blackKeyWidth}px`;
+        },
+        blackLiLeft: function() {
+            return `${(this.keyWidth) * (-12/ 36)}px`;
         },
     },
     methods: {

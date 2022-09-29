@@ -8,6 +8,7 @@
 
     <script src="js/webmidi.js"></script>
     <script src="js/vue.js"></script>
+    <script src="js/vexflow.js"></script>
 </head>
 <body>
 
@@ -34,10 +35,11 @@
         <br>
         <a href="https://github.com/huangxd-/WebChordieApp/blob/main/README.md">FAQ</a>
     </div>
+    <div id="scorePanel"></div>
     <div id="p-wrapper">
         <ul id="piano">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">
-                <span v-if="isBlackKey(index)" class="key">
+                <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">
                     <div style="width: 100%; height: 100%;" :style="velocityCss(key.velocity, index)"></div>
                 </span>
                 <div v-else class="key anchor">

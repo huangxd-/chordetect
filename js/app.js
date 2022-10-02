@@ -1,4 +1,6 @@
 Object.defineProperty(Vue.prototype, 'WebMidi', { value: WebMidi });
+const { Factory } = Vex.Flow;
+
 
 var app = new Vue({
     el: '#app',
@@ -22,6 +24,17 @@ var app = new Vue({
         system: null,
         lowNotes: null,
         upNotes: null,
+        midiCode: ['A0', 'A#0', 'B0',
+            'C1', 'C#1', 'D1', 'D#1', 'E1', 'F1', 'F#1', 'G1', 'G#1', 'A1', 'A#1', 'B1',
+            'C2', 'C#2', 'D2', 'D#2', 'E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2',
+            'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3',
+            'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
+            'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
+            'C6', 'C#6', 'D6', 'D#6', 'E6', 'F6', 'F#6', 'G6', 'G#6', 'A6', 'A#6', 'B6',
+            'C7', 'C#7', 'D7', 'D#7', 'E7', 'F7', 'F#7', 'G7', 'G#7', 'A7', 'A#7', 'B7',
+            'C8'],
+        lowNoteMidiArr: [],
+        upNoteMidiArr: [],
     },
     created: function () {
 
@@ -40,37 +53,8 @@ var app = new Vue({
             }
         });
 
-        const { Factory } = Vex.Flow;
-
-        this.vf = new Factory({
-            renderer: { elementId: 'scorePanel', width: 500, height: 500 },
-        });
-
-        this.score = this.vf.EasyScore();
-        this.system = this.vf.System();
-
-        this.lowNotes = this.score.notes('(C4 D#4 E4 G4 Bb4)/w')
-        this.upNotes = this.score.notes('(C2 E2 G3 Bb3)/1', {clef:'bass'})
-
-        this.system
-            .addStave({
-                voices: [
-                    this.score.voice(this.lowNotes),
-                ],
-            })
-            .addClef('treble')
-
-        this.system
-            .addStave({
-                voices: [
-                    this.score.voice(this.upNotes),
-                ],
-            })
-            .addClef('bass')
-
-        this.system.addConnector()
-
-        this.vf.draw();
+        // this.renderChord('', '')
+        // this.renderChord('C2 E2 G3 Bb3', 'C4 D#4 E4 G4 Bb4');
     },
     watch: {
         selectedMidiInputId(newMidiInputId) {
@@ -84,6 +68,17 @@ var app = new Vue({
                     if(0 <= note && note < this.keys.length) {
                         this.keys[note].velocity = event.velocity;
                         this.keys[note].pushed = true;
+
+                        // for (let i = 0; i < 89; ++i) {
+                        //     if (this.keys[i] && this.keys[i].pushed === true) {
+                        //         if (i < 39) {
+                        //             this.lowNoteMidiArr.push(this.midiCode[i])
+                        //         } else {
+                        //             this.upNoteMidiArr.push(this.midiCode[i])
+                        //         }
+                        //     }
+                        // }
+                        // this.renderChord(this.lowNoteMidiArr, this.upNoteMidiArr)
                     }
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {
@@ -97,7 +92,7 @@ var app = new Vue({
                 });
                 this.midiInput.addListener('controlchange', 'all', (event) => {
                     // Hold pedal
-                    if(event.controller.number == 64) {
+                    if(event.controller.number === 64) {
                         if(event.value > 0) {
                             this.holdPedal = true;
                         } else {
@@ -156,6 +151,44 @@ var app = new Vue({
             return {
                 background: `hsla(${hue},100%,50%,${alpha})`
             };
+        },
+
+        renderChord(lowNoteArr, upNoteArr) {
+            const scorePanel = document.getElementById("scorePanel")
+            while (scorePanel.hasChildNodes()) {
+                scorePanel.removeChild(scorePanel.lastChild);
+            }
+
+            this.vf = new Factory({
+                renderer: { elementId: 'scorePanel', width: 500, height: 500 },
+            });
+
+            this.score = this.vf.EasyScore();
+            this.system = this.vf.System();
+
+            // TODO： 需要处理没有note的情况
+            this.lowNotes = this.score.notes(`(${lowNoteArr})/1`, {clef:'bass'})
+            this.upNotes = this.score.notes(`(${upNoteArr})/1`)
+
+            this.system
+                .addStave({
+                    voices: [
+                        this.score.voice(this.upNotes),
+                    ],
+                })
+                .addClef('treble')
+
+            this.system
+                .addStave({
+                    voices: [
+                        this.score.voice(this.lowNotes),
+                    ],
+                })
+                .addClef('bass')
+
+            this.system.addConnector()
+
+            this.vf.draw();
         },
     }
 });

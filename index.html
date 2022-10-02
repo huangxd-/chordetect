@@ -22,9 +22,6 @@
             <option v-for="input in WebMidi.inputs" :value="input.id" :key="input.id">{{ input.name }}</option>
         </select>
 
-        <label for="transpose">Transpose:</label>
-        <input type="number" id="transpose" v-model.number="transpose" min="-24" max="24">
-
         <label for="colors">Colors:</label>
         <input type="checkbox" id="colors" v-model.boolean="colors">
     </div>

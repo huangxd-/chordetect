@@ -1,6 +1,6 @@
 Object.defineProperty(Vue.prototype, 'WebMidi', { value: WebMidi });
 const { Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector } = Vex.Flow;
-
+let a = null
 
 var app = new Vue({
     el: '#app',
@@ -54,9 +54,8 @@ var app = new Vue({
         });
 
         this.initScore()
-        this.renderScore(['a/0', 'e/2', 'g/3', 'bb/3', 'c/4', 'd#/4', 'e/4', 'g/4', 'a/3'])
+        // this.renderScore(['a/0', 'e/2', 'g/3', 'bb/3', 'c/4', 'd#/4', 'e/4', 'g/4', 'a/3'])
 
-        // this.renderScore(['c/3'])
     },
     watch: {
         selectedMidiInputId(newMidiInputId) {
@@ -71,16 +70,7 @@ var app = new Vue({
                         this.keys[note].velocity = event.velocity;
                         this.keys[note].pushed = true;
 
-                        // for (let i = 0; i < 89; ++i) {
-                        //     if (this.keys[i] && this.keys[i].pushed === true) {
-                        //         if (i < 39) {
-                        //             this.lowNoteMidiArr.push(this.midiCode[i])
-                        //         } else {
-                        //             this.upNoteMidiArr.push(this.midiCode[i])
-                        //         }
-                        //     }
-                        // }
-                        // this.renderChord(this.lowNoteMidiArr, this.upNoteMidiArr)
+                        this.refreshScore()
                     }
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {
@@ -90,6 +80,8 @@ var app = new Vue({
                             this.keys[note].velocity = 0;
                         }
                         this.keys[note].pushed = false;
+
+                        this.refreshScore()
                     }
                 });
                 this.midiInput.addListener('controlchange', 'all', (event) => {
@@ -106,6 +98,8 @@ var app = new Vue({
                             }
                         }
                     }
+
+                    this.refreshScore()
 
                 });
             }
@@ -159,31 +153,36 @@ var app = new Vue({
             const div = document.getElementById('scorePanel');
             const renderer = new Renderer(div, Renderer.Backends.SVG);
 
-            renderer.resize(180, 320);
+            renderer.resize(280, 320);
             this.scoreContext = renderer.getContext();
             this.scoreContext.setFont('Arial', 10);
 
-            this.staveTreble = new Stave(10, 60, 180);
-            this.staveBass = new Stave(10, 140, 180);
+            this.staveTreble = new Stave(10, 60, 280);
+            this.staveBass = new Stave(10, 140, 280);
 
             this.staveTreble.addClef('treble')
             this.staveBass.addClef('bass')
 
-            const connector = new StaveConnector(this.staveTreble, this.staveBass);
-            connector.setType(StaveConnector.type.SINGLE);
-            connector.setContext(this.scoreContext);
+            // const connector = new StaveConnector(this.staveTreble, this.staveBass);
+            // connector.setType(StaveConnector.type.SINGLE);
+            // connector.setContext(this.scoreContext);
 
             this.staveTreble.setContext(this.scoreContext).draw();
             this.staveBass.setContext(this.scoreContext).draw();
-            connector.draw();
+            // connector.draw();
         },
 
         renderScore(noteArr) {
             if (this.upVoice != null) {
-                this.upVoice.tickables[0].attrs.el.remove()
+                const div = document.getElementById('scorePanel');
+                while(div.firstChild) {
+                    div.removeChild(div.firstChild);
+                }
+                this.initScore()
             }
-            if (this.lowVoice != null) {
-                this.lowVoice.tickables[0].attrs.el.remove()
+
+            if (noteArr.length === 0) {
+                return
             }
 
             const context = this.scoreContext
@@ -201,8 +200,8 @@ var app = new Vue({
                 }
             })
 
-            console.log(upNotes)
-            console.log(lowNotes)
+            // console.log(upNotes)
+            // console.log(lowNotes)
 
             const voices = [];
 
@@ -223,7 +222,7 @@ var app = new Vue({
                     upStaveNote,
                 ];
 
-                this.upVoice = new Voice({}).addTickables(notesUp)
+                this.upVoice = new Voice({num_beats:4, beat_value: 4}).setMode(Voice.Mode.STRICT).addTickables(notesUp)
 
                 voices.push(this.upVoice)
             }
@@ -246,12 +245,15 @@ var app = new Vue({
                     lowStaveNote,
                 ];
 
-                this.lowVoice = new Voice({}).addTickables(notesLow)
+                this.lowVoice = new Voice({num_beats:4, beat_value: 4}).setMode(Voice.Mode.STRICT).addTickables(notesLow)
 
                 voices.push(this.lowVoice)
             }
 
-            new Formatter().joinVoices(voices).format(voices, 120);
+            new Formatter().joinVoices(voices).format(voices, 180);
+
+            staveTreble.setNoteStartX(60)
+            staveBass.setNoteStartX(60)
 
             if (upNotes.length !== 0) {
                 this.upVoice.draw(context, staveTreble);
@@ -261,5 +263,15 @@ var app = new Vue({
             }
 
         },
+
+        refreshScore() {
+            var noteArr = []
+            for (let i = 0; i < 89; ++i) {
+                if (this.keys[i] && this.keys[i].velocity !== 0) {
+                    noteArr.push(this.midiCode[i])
+                }
+            }
+            this.renderScore(noteArr)
+        }
     }
 });

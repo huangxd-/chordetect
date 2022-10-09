@@ -43,10 +43,10 @@
         <ul id="piano">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">
                 <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">
-                    <div style="width: 100%; height: 100%;" :style="velocityCss(key.velocity, index)"></div>
+                    <div class="blackKey" :style="velocityCss(key.velocity, index)">{{ key.name }}</div>
                 </span>
                 <div v-else class="key anchor">
-                    <div style="width: 100%; height: 100%;" :style="velocityCss(key.velocity, index)"></div>
+                    <div class="whiteKey" :style="velocityCss(key.velocity, index)">{{ key.name }}</div>
                 </div>
             </li>
         </ul>

@@ -29,6 +29,7 @@ var app = new Vue({
             'c/6', 'c#/6', 'd/6', 'd#/6', 'e/6', 'f/6', 'f#/6', 'g/6', 'g#/6', 'a/6', 'a#/6', 'b/6',
             'c/7', 'c#/7', 'd/7', 'd#/7', 'e/7', 'f/7', 'f#/7', 'g/7', 'g#/7', 'a/7', 'a#/7', 'b/7',
             'c/8'],
+        keyNames: ['A', '#A', 'B', 'C', '#C', 'D', '#D', 'E', 'F', '#F', 'G', '#G'],
         lowNoteMidiArr: [],
         upNoteMidiArr: [],
         scoreContext: null,
@@ -126,12 +127,12 @@ var app = new Vue({
     },
     methods: {
         initKeyboard() {
-
             var keys = [];
             for(var i = 0; i<this.nbKeys; ++i) {
                 keys.push({
                     velocity: 0,
-                    pushed: false
+                    pushed: false,
+                    name: this.keyNames[i % 12],
                 });
             }
 
@@ -151,7 +152,7 @@ var app = new Vue({
             var alpha = velocity * 0.4 + 0.6;
             var hue = this.colors ? ((index*7)%12) / 12 * 360 : 120;
             return {
-                background: `hsla(${hue},100%,50%,${alpha})`
+                background: `hsla(${hue},100%,50%,${alpha})`, color: `rgb(0, 0, 0, 1)`
             };
         },
 

@@ -204,6 +204,24 @@ ul#piano li li a:hover {
     border-bottom-color: #000;
 }
 
+.blackKey {
+    width: 100%;
+    height: 100%;
+    font-size: 8px;
+    color: rgb(0, 0, 0, 0);
+    text-align: center;
+    margin: auto auto 20px;
+}
+
+.whiteKey {
+    width: 100%;
+    height: 100%;
+    font-size: 8px;
+    color: rgb(0, 0, 0, 0);
+    text-align: center;
+    margin: auto auto 20px;
+}
+
 .clear {
     clear: both;
 }

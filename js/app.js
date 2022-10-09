@@ -17,6 +17,7 @@ var app = new Vue({
         keys: [],
         holdPedal: false,
         pageWidth: window.innerWidth,
+        pageHeight: window.innerHeight,
         keyWidth: null,
         blackKeyWidth: null,
         midiCode: ['a/0', 'a#/0', 'b/0',
@@ -35,6 +36,8 @@ var app = new Vue({
         staveBass: null,
         upVoice: null,
         lowVoice: null,
+        scorePanelWidth: 280,
+        scorePanelHeight: 320,
     },
     created: function () {
 
@@ -117,6 +120,9 @@ var app = new Vue({
         blackLiLeft: function() {
             return `${(this.keyWidth) * (-12/ 36)}px`;
         },
+        scoreMarginLeft: function() {
+            return `${((this.pageHeight) - this.scorePanelHeight - 200) / 2}px 0px`;
+        },
     },
     methods: {
         initKeyboard() {
@@ -153,33 +159,31 @@ var app = new Vue({
             const div = document.getElementById('scorePanel');
             const renderer = new Renderer(div, Renderer.Backends.SVG);
 
-            renderer.resize(280, 320);
+            renderer.resize(this.scorePanelWidth, this.scorePanelHeight);
             this.scoreContext = renderer.getContext();
             this.scoreContext.setFont('Arial', 10);
 
-            this.staveTreble = new Stave(10, 60, 280);
-            this.staveBass = new Stave(10, 140, 280);
+            this.staveTreble = new Stave(10, 60, this.scorePanelWidth);
+            this.staveBass = new Stave(10, 140, this.scorePanelWidth);
 
             this.staveTreble.addClef('treble')
             this.staveBass.addClef('bass')
 
-            // const connector = new StaveConnector(this.staveTreble, this.staveBass);
-            // connector.setType(StaveConnector.type.SINGLE);
-            // connector.setContext(this.scoreContext);
+            const connector = new StaveConnector(this.staveTreble, this.staveBass);
+            connector.setType(StaveConnector.type.SINGLE);
+            connector.setContext(this.scoreContext);
 
             this.staveTreble.setContext(this.scoreContext).draw();
             this.staveBass.setContext(this.scoreContext).draw();
-            // connector.draw();
+            connector.draw();
         },
 
         renderScore(noteArr) {
-            if (this.upVoice != null) {
-                const div = document.getElementById('scorePanel');
-                while(div.firstChild) {
-                    div.removeChild(div.firstChild);
-                }
-                this.initScore()
+            const div = document.getElementById('scorePanel');
+            while(div.firstChild) {
+                div.removeChild(div.firstChild);
             }
+            this.initScore()
 
             if (noteArr.length === 0) {
                 return
@@ -204,6 +208,7 @@ var app = new Vue({
             // console.log(lowNotes)
 
             const voices = [];
+            var formatter = new Formatter();
 
             if (upNotes.length !== 0) {
                 const upStaveNote = new StaveNote({
@@ -222,8 +227,9 @@ var app = new Vue({
                     upStaveNote,
                 ];
 
-                this.upVoice = new Voice({num_beats:4, beat_value: 4}).setMode(Voice.Mode.STRICT).addTickables(notesUp)
+                this.upVoice = new Voice({num_beats:4, beat_value: 4}).addTickables(notesUp)
 
+                formatter.joinVoices([this.upVoice]);
                 voices.push(this.upVoice)
             }
 
@@ -245,15 +251,16 @@ var app = new Vue({
                     lowStaveNote,
                 ];
 
-                this.lowVoice = new Voice({num_beats:4, beat_value: 4}).setMode(Voice.Mode.STRICT).addTickables(notesLow)
+                this.lowVoice = new Voice({num_beats:4, beat_value: 4}).addTickables(notesLow)
 
+                formatter.joinVoices([this.lowVoice]);
                 voices.push(this.lowVoice)
             }
 
-            new Formatter().joinVoices(voices).format(voices, 180);
-
-            staveTreble.setNoteStartX(60)
-            staveBass.setNoteStartX(60)
+            var startX = Math.max(staveTreble.getNoteStartX(), staveBass.getNoteStartX());
+            staveTreble.setNoteStartX(startX);
+            staveBass.setNoteStartX(startX);
+            formatter.format(voices, 200);
 
             if (upNotes.length !== 0) {
                 this.upVoice.draw(context, staveTreble);

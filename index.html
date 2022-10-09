@@ -25,14 +25,20 @@
         <label for="colors">Colors:</label>
         <input type="checkbox" id="colors" v-model.boolean="colors">
     </div>
-    <div class="credits">
-        <a href="https://github.com/huangxd-/WebChordieApp">WebChordieApp</a>
-        by
-        <a href="https://github.com/huangxd-">@huangxd-</a>
-        <br>
-        <a href="https://github.com/huangxd-/WebChordieApp/blob/main/README.md">FAQ</a>
+<!--    <div class="credits">-->
+<!--        <a href="https://github.com/huangxd-/WebChordieApp">WebChordieApp</a>-->
+<!--        by-->
+<!--        <a href="https://github.com/huangxd-">@huangxd-</a>-->
+<!--        <br>-->
+<!--        <a href="https://github.com/huangxd-/WebChordieApp/blob/main/README.md">FAQ</a>-->
+<!--    </div>-->
+    <div id="scoreWrap" :style="{margin: scoreMarginLeft}">
+        <div id="scorePanel"></div>
+        <div id="chordPanel">
+            <span id="preferChord">G7sus4</span>
+            <span id="secondaryChord">Cmaj7</span>
+        </div>
     </div>
-    <div id="scorePanel"></div>
     <div id="p-wrapper">
         <ul id="piano">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">

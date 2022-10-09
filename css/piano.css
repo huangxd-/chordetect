@@ -30,6 +30,30 @@ body {
     background: #F5F5F5;
 }
 
+#scoreWrap {
+    display: flex;
+    justify-content: center;
+}
+
+#chordPanel {
+    width: 280px;
+    height: 320px;
+    margin-left: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#preferChord {
+    font-size: 30px;
+}
+
+#secondaryChord {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #666666;
+}
+
 /* Piano Wrapper */
 #p-wrapper {
     overflow-x: auto;

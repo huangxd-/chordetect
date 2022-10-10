@@ -40,13 +40,23 @@
         </div>
     </div>
     <div id="p-wrapper">
+        <ul id="pianoNote">
+            <li v-for="(key, index) in keys" :style="{width: liWidth}">
+                <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">
+                    <div class="blackKey" :style="velocityCss(key.velocity, index, 'name')">{{ key.name }}</div>
+                </span>
+                <div v-else class="key anchor">
+                    <div class="whiteKey" :style="velocityCss(key.velocity, index, 'name')">{{ key.name }}</div>
+                </div>
+            </li>
+        </ul>
         <ul id="piano">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">
                 <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">
-                    <div class="blackKey" :style="velocityCss(key.velocity, index)">{{ key.name }}</div>
+                    <div class="blackKey" :style="velocityCss(key.velocity, index, 'color')"></div>
                 </span>
                 <div v-else class="key anchor">
-                    <div class="whiteKey" :style="velocityCss(key.velocity, index)">{{ key.name }}</div>
+                    <div class="whiteKey" :style="velocityCss(key.velocity, index, 'color')"></div>
                 </div>
             </li>
         </ul>

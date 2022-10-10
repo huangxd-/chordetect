@@ -144,16 +144,22 @@ var app = new Vue({
             return (key < 5) == (key % 2);
         },
 
-        velocityCss(velocity, index) {
+        velocityCss(velocity, index, type) {
             if(velocity <= 0) {
                 return {};
             }
 
             var alpha = velocity * 0.4 + 0.6;
             var hue = this.colors ? ((index*7)%12) / 12 * 360 : 120;
-            return {
-                background: `hsla(${hue},100%,50%,${alpha})`, color: `rgb(0, 0, 0, 1)`
-            };
+            if (type === 'color') {
+                return {
+                    background: `hsla(${hue},100%,50%,${alpha})`
+                };
+            } else {
+                return {
+                    color: `rgba(0, 0, 0, 1)`
+                };
+            }
         },
 
         initScore() {
@@ -261,7 +267,7 @@ var app = new Vue({
             var startX = Math.max(staveTreble.getNoteStartX(), staveBass.getNoteStartX());
             staveTreble.setNoteStartX(startX);
             staveBass.setNoteStartX(startX);
-            formatter.format(voices, 200);
+            formatter.format(voices, 240);
 
             if (upNotes.length !== 0) {
                 this.upVoice.draw(context, staveTreble);

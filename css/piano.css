@@ -69,11 +69,24 @@ ul#piano {
     overflow: auto;
 }
 
+ul#pianoNote {
+    display: inline-block;
+    height: 20px;
+}
+
 ul#piano li {
     list-style: none;
     float: left;
     display: inline;
     background: #aaa;
+    position: relative;
+}
+
+ul#pianoNote li {
+    list-style: none;
+    float: left;
+    display: inline;
+    background: rgba(0, 0, 0, 0);
     position: relative;
 }
 
@@ -149,6 +162,13 @@ ul#piano li span {
     -webkit-border-radius: 0 0 2px 2px;
     -moz-border-radius: 0 0 2px 2px;
     border-radius: 0 0 2px 2px;
+}
+
+ul#pianoNote li span {
+    position: absolute;
+    top: 0px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0);
 }
 
 ul#piano li span:active {

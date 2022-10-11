@@ -36,8 +36,6 @@ body {
 }
 
 #chordPanel {
-    width: 280px;
-    height: 320px;
     margin-left: 100px;
     display: flex;
     justify-content: center;
@@ -45,12 +43,12 @@ body {
 }
 
 #preferChord {
-    font-size: 30px;
+    font-size: 36px;
 }
 
 #secondaryChord {
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 24px;
     color: #666666;
 }
 

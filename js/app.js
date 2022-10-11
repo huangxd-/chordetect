@@ -1,12 +1,11 @@
-Object.defineProperty(Vue.prototype, 'WebMidi', { value: WebMidi });
-const { Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector } = Vex.Flow;
-let a = null
+Object.defineProperty(Vue.prototype, 'WebMidi', {value: WebMidi});
+const {Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier} = Vex.Flow;
+const scorePanelScale = 1.3
 
 var app = new Vue({
     el: '#app',
-    props: {
-    },
-    data:  {
+    props: {},
+    data: {
         nbKeys: 88,
         offsetKeys: 21,
         transpose: 0,
@@ -37,8 +36,10 @@ var app = new Vue({
         staveBass: null,
         upVoice: null,
         lowVoice: null,
-        scorePanelWidth: 280,
-        scorePanelHeight: 320,
+        scorePanelWidth: 280 * scorePanelScale,
+        scorePanelHeight: 320 * scorePanelScale,
+        noteFixX: 100,
+        fretFixX: -50,
     },
     created: function () {
 
@@ -52,7 +53,7 @@ var app = new Vue({
                 return;
             }
 
-            if(WebMidi.inputs.length) {
+            if (WebMidi.inputs.length) {
                 this.selectedMidiInputId = WebMidi.inputs[0].id;
             }
         });
@@ -63,14 +64,14 @@ var app = new Vue({
     },
     watch: {
         selectedMidiInputId(newMidiInputId) {
-            if(this.midiInput) {
+            if (this.midiInput) {
                 this.midiInput.removeListener();
             }
             this.midiInput = WebMidi.getInputById(newMidiInputId);
-            if(this.midiInput) {
+            if (this.midiInput) {
                 this.midiInput.addListener('noteon', 'all', (event) => {
                     var note = event.note.number - this.offsetKeys + this.transpose;
-                    if(0 <= note && note < this.keys.length) {
+                    if (0 <= note && note < this.keys.length) {
                         this.keys[note].velocity = event.velocity;
                         this.keys[note].pushed = true;
 
@@ -79,8 +80,8 @@ var app = new Vue({
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {
                     var note = event.note.number - this.offsetKeys + this.transpose;
-                    if(0 <= note && note < this.keys.length) {
-                        if(!this.holdPedal) {
+                    if (0 <= note && note < this.keys.length) {
+                        if (!this.holdPedal) {
                             this.keys[note].velocity = 0;
                         }
                         this.keys[note].pushed = false;
@@ -90,13 +91,13 @@ var app = new Vue({
                 });
                 this.midiInput.addListener('controlchange', 'all', (event) => {
                     // Hold pedal
-                    if(event.controller.number === 64) {
-                        if(event.value > 0) {
+                    if (event.controller.number === 64) {
+                        if (event.value > 0) {
                             this.holdPedal = true;
                         } else {
                             this.holdPedal = false;
-                            for(var i =0; i<this.keys.length; ++i) {
-                                if(!this.keys[i].pushed) {
+                            for (var i = 0; i < this.keys.length; ++i) {
+                                if (!this.keys[i].pushed) {
                                     this.keys[i].velocity = 0;
                                 }
                             }
@@ -110,25 +111,31 @@ var app = new Vue({
         }
     },
     computed: {
-        liWidth: function() {
+        liWidth: function () {
             this.keyWidth = `${(this.pageWidth - 50) / ((this.nbKeys + 1) / 12/*keys/octaves*/ * 7/*white keys/octave*/)}`
             return `${this.keyWidth}px`;
         },
-        blackLiWidth: function() {
-            this.blackKeyWidth = `${(this.keyWidth) * (20/ 36)}`
+        blackLiWidth: function () {
+            this.blackKeyWidth = `${(this.keyWidth) * (20 / 36)}`
             return `${this.blackKeyWidth}px`;
         },
-        blackLiLeft: function() {
-            return `${(this.keyWidth) * (-12/ 36)}px`;
+        blackLiLeft: function () {
+            return `${(this.keyWidth) * (-12 / 36)}px`;
         },
-        scoreMarginLeft: function() {
+        scoreMarginLeft: function () {
             return `${((this.pageHeight) - this.scorePanelHeight - 200) / 2}px 0px`;
+        },
+        chordPanelWidth: function () {
+            return `${this.scorePanelWidth - 100}px`;
+        },
+        chordPanelHeight: function () {
+            return `${this.scorePanelHeight}px`;
         },
     },
     methods: {
         initKeyboard() {
             var keys = [];
-            for(var i = 0; i<this.nbKeys; ++i) {
+            for (var i = 0; i < this.nbKeys; ++i) {
                 keys.push({
                     velocity: 0,
                     pushed: false,
@@ -145,12 +152,12 @@ var app = new Vue({
         },
 
         velocityCss(velocity, index, type) {
-            if(velocity <= 0) {
+            if (velocity <= 0) {
                 return {};
             }
 
             var alpha = velocity * 0.4 + 0.6;
-            var hue = this.colors ? ((index*7)%12) / 12 * 360 : 120;
+            var hue = this.colors ? ((index * 7) % 12) / 12 * 360 : 120;
             if (type === 'color') {
                 return {
                     background: `hsla(${hue},100%,50%,${alpha})`
@@ -168,6 +175,7 @@ var app = new Vue({
 
             renderer.resize(this.scorePanelWidth, this.scorePanelHeight);
             this.scoreContext = renderer.getContext();
+            this.scoreContext.scale(scorePanelScale, scorePanelScale);
             this.scoreContext.setFont('Arial', 10);
 
             this.staveTreble = new Stave(10, 60, this.scorePanelWidth);
@@ -187,7 +195,7 @@ var app = new Vue({
 
         renderScore(noteArr) {
             const div = document.getElementById('scorePanel');
-            while(div.firstChild) {
+            while (div.firstChild) {
                 div.removeChild(div.firstChild);
             }
             this.initScore()
@@ -202,8 +210,10 @@ var app = new Vue({
 
             const upNotes = []
             const lowNotes = []
+            var upStaveNote = null
+            var lowStaveNote = null
 
-            noteArr.forEach(function(key) {
+            noteArr.forEach(function (key) {
                 if (parseInt(key.split('/')[1]) >= 4) {
                     upNotes.push(key)
                 } else {
@@ -211,40 +221,36 @@ var app = new Vue({
                 }
             })
 
-            // console.log(upNotes)
-            // console.log(lowNotes)
-
             const voices = [];
             var formatter = new Formatter();
 
             if (upNotes.length !== 0) {
-                const upStaveNote = new StaveNote({
+                upStaveNote = new StaveNote({
                     keys: upNotes,
                     duration: "w",
-                    align_center: true,
                 })
 
                 for (let i = 0; i < upNotes.length; ++i) {
                     if (upNotes[i].split('/')[0].length > 1) {
                         upStaveNote.addModifier(new Accidental(upNotes[i].split('/')[0][1]), i)
                     }
+                    upStaveNote.addModifier(new FretHandFinger(upNotes[i].split('/')[0].toUpperCase()), i)
                 }
 
                 const notesUp = [
                     upStaveNote,
                 ];
 
-                this.upVoice = new Voice({num_beats:4, beat_value: 4}).addTickables(notesUp)
+                this.upVoice = new Voice({num_beats: 4, beat_value: 4}).addTickables(notesUp)
 
                 formatter.joinVoices([this.upVoice]);
                 voices.push(this.upVoice)
             }
 
             if (lowNotes.length !== 0) {
-                const lowStaveNote = new StaveNote({
+                lowStaveNote = new StaveNote({
                     keys: lowNotes,
                     duration: "w",
-                    align_center: true,
                     clef: 'bass',
                 })
 
@@ -252,13 +258,14 @@ var app = new Vue({
                     if (lowNotes[i].split('/')[0].length > 1) {
                         lowStaveNote.addModifier(new Accidental(lowNotes[i].split('/')[0][1]), i)
                     }
+                    lowStaveNote.addModifier(new FretHandFinger(lowNotes[i].split('/')[0].toUpperCase()), i)
                 }
 
                 const notesLow = [
                     lowStaveNote,
                 ];
 
-                this.lowVoice = new Voice({num_beats:4, beat_value: 4}).addTickables(notesLow)
+                this.lowVoice = new Voice({num_beats: 4, beat_value: 4}).addTickables(notesLow)
 
                 formatter.joinVoices([this.lowVoice]);
                 voices.push(this.lowVoice)
@@ -269,11 +276,48 @@ var app = new Vue({
             staveBass.setNoteStartX(startX);
             formatter.format(voices, 240);
 
-            if (upNotes.length !== 0) {
-                this.upVoice.draw(context, staveTreble);
-            }
+            var fretCount = 0
             if (lowNotes.length !== 0) {
                 this.lowVoice.draw(context, staveBass);
+
+                this.lowVoice.tickables[0].attrs.el.remove()
+
+                lowStaveNote.getModifiers().forEach((element) => {
+                    if (element.getCategory() === 'Accidental') {
+                        // fix note x
+                        element.setXShift(lowStaveNote.getX() - this.noteFixX - element.getXShift())
+                    } else if (element.getCategory() === 'FretHandFinger') {
+                        // fix fretHandFinger x
+                        element.setXShift(this.fretFixX - (fretCount % 3) * 20)
+                        element.setPosition(Modifier.Position.RIGHT)
+                        element.setFont({weight: 1})
+                        fretCount += 1
+                    }
+                });
+
+                lowStaveNote.setXShift(this.noteFixX - lowStaveNote.getX())
+                lowStaveNote.draw(context, staveBass);
+            }
+            if (upNotes.length !== 0) {
+                this.upVoice.draw(context, staveTreble);
+
+                this.upVoice.tickables[0].attrs.el.remove()
+
+                upStaveNote.getModifiers().forEach((element) => {
+                    if (element.getCategory() === 'Accidental') {
+                        // fix note x
+                        element.setXShift(upStaveNote.getX() - this.noteFixX - element.getXShift())
+                    } else if (element.getCategory() === 'FretHandFinger') {
+                        // fix fretHandFinger x
+                        element.setXShift(this.fretFixX - (fretCount % 3) * 20)
+                        element.setPosition(Modifier.Position.RIGHT)
+                        element.setFont({weight: 1})
+                        fretCount += 1
+                    }
+                });
+
+                upStaveNote.setXShift(this.noteFixX - upStaveNote.getX())
+                upStaveNote.draw(context, staveTreble);
             }
 
         },

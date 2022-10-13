@@ -1,5 +1,6 @@
 Object.defineProperty(Vue.prototype, 'WebMidi', {value: WebMidi});
-const {Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier} = Vex.Flow;
+const {Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
+    KeySignature, KeyManager} = Vex.Flow;
 const scorePanelScale = 1.3
 
 var app = new Vue({
@@ -19,16 +20,17 @@ var app = new Vue({
         pageHeight: window.innerHeight,
         keyWidth: null,
         blackKeyWidth: null,
+        keyList: ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'],
         midiCode: ['a/0', 'a#/0', 'b/0',
-            'c/1', 'c#/1', 'd/1', 'd#/1', 'e/1', 'f/1', 'f#/1', 'g/1', 'g#/1', 'a/1', 'a#/1', 'b/1',
-            'c/2', 'c#/2', 'd/2', 'd#/2', 'e/2', 'f/2', 'f#/2', 'g/2', 'g#/2', 'a/2', 'a#/2', 'b/2',
-            'c/3', 'c#/3', 'd/3', 'd#/3', 'e/3', 'f/3', 'f#/3', 'g/3', 'g#/3', 'a/3', 'a#/3', 'b/3',
-            'c/4', 'c#/4', 'd/4', 'd#/4', 'e/4', 'f/4', 'f#/4', 'g/4', 'g#/4', 'a/4', 'a#/4', 'b/4',
-            'c/5', 'c#/5', 'd/5', 'd#/5', 'e/5', 'f/5', 'f#/5', 'g/5', 'g#/5', 'a/5', 'a#/5', 'b/5',
-            'c/6', 'c#/6', 'd/6', 'd#/6', 'e/6', 'f/6', 'f#/6', 'g/6', 'g#/6', 'a/6', 'a#/6', 'b/6',
-            'c/7', 'c#/7', 'd/7', 'd#/7', 'e/7', 'f/7', 'f#/7', 'g/7', 'g#/7', 'a/7', 'a#/7', 'b/7',
+            'c/1', 'c#/1', 'd/1', 'eb/1', 'e/1', 'f/1', 'f#/1', 'g/1', 'ab/1', 'a/1', 'bb/1', 'b/1',
+            'c/2', 'c#/2', 'd/2', 'eb/2', 'e/2', 'f/2', 'f#/2', 'g/2', 'ab/2', 'a/2', 'bb/2', 'b/2',
+            'c/3', 'c#/3', 'd/3', 'eb/3', 'e/3', 'f/3', 'f#/3', 'g/3', 'ab/3', 'a/3', 'bb/3', 'b/3',
+            'c/4', 'c#/4', 'd/4', 'eb/4', 'e/4', 'f/4', 'f#/4', 'g/4', 'ab/4', 'a/4', 'bb/4', 'b/4',
+            'c/5', 'c#/5', 'd/5', 'eb/5', 'e/5', 'f/5', 'f#/5', 'g/5', 'ab/5', 'a/5', 'bb/5', 'b/5',
+            'c/6', 'c#/6', 'd/6', 'eb/6', 'e/6', 'f/6', 'f#/6', 'g/6', 'ab/6', 'a/6', 'bb/6', 'b/6',
+            'c/7', 'c#/7', 'd/7', 'eb/7', 'e/7', 'f/7', 'f#/7', 'g/7', 'ab/7', 'a/7', 'bb/7', 'b/7',
             'c/8'],
-        keyNames: ['A', '#A', 'B', 'C', '#C', 'D', '#D', 'E', 'F', '#F', 'G', '#G'],
+        keyNames: ['A', 'Bb', 'B', 'C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'],
         lowNoteMidiArr: [],
         upNoteMidiArr: [],
         scoreContext: null,
@@ -40,6 +42,10 @@ var app = new Vue({
         scorePanelHeight: 320 * scorePanelScale,
         noteFixX: 100,
         fretFixX: -50,
+        keyStr: 'C',
+        keySigUp: null,
+        keySigLow: null,
+
     },
     created: function () {
 
@@ -59,7 +65,6 @@ var app = new Vue({
         });
 
         this.initScore()
-        // this.renderScore(['a/0', 'e/2', 'g/3', 'bb/3', 'c/4', 'd#/4', 'e/4', 'g/4', 'a/3'])
 
     },
     watch: {
@@ -108,7 +113,11 @@ var app = new Vue({
 
                 });
             }
-        }
+        },
+
+        keyStr() {
+            this.refreshScore()
+        },
     },
     computed: {
         liWidth: function () {
@@ -169,6 +178,10 @@ var app = new Vue({
             }
         },
 
+        capFirst(str) {
+            return str[0].toUpperCase() + str.slice(1);
+        },
+
         initScore() {
             const div = document.getElementById('scorePanel');
             const renderer = new Renderer(div, Renderer.Backends.SVG);
@@ -184,6 +197,11 @@ var app = new Vue({
             this.staveTreble.addClef('treble')
             this.staveBass.addClef('bass')
 
+            this.keySigUp = new KeySignature(this.keyStr)
+            this.keySigUp.addToStave(this.staveTreble)
+            this.keySigLow = new KeySignature(this.keyStr)
+            this.keySigLow.addToStave(this.staveBass)
+
             const connector = new StaveConnector(this.staveTreble, this.staveBass);
             connector.setType(StaveConnector.type.SINGLE);
             connector.setContext(this.scoreContext);
@@ -193,11 +211,15 @@ var app = new Vue({
             connector.draw();
         },
 
-        renderScore(noteArr) {
+        rmScore() {
             const div = document.getElementById('scorePanel');
             while (div.firstChild) {
                 div.removeChild(div.firstChild);
             }
+        },
+
+        renderScore(noteArr) {
+            this.rmScore()
             this.initScore()
 
             if (noteArr.length === 0) {
@@ -234,7 +256,7 @@ var app = new Vue({
                     if (upNotes[i].split('/')[0].length > 1) {
                         upStaveNote.addModifier(new Accidental(upNotes[i].split('/')[0][1]), i)
                     }
-                    upStaveNote.addModifier(new FretHandFinger(upNotes[i].split('/')[0].toUpperCase()), i)
+                    upStaveNote.addModifier(new FretHandFinger(this.capFirst(upNotes[i].split('/')[0])), i)
                 }
 
                 const notesUp = [
@@ -258,7 +280,7 @@ var app = new Vue({
                     if (lowNotes[i].split('/')[0].length > 1) {
                         lowStaveNote.addModifier(new Accidental(lowNotes[i].split('/')[0][1]), i)
                     }
-                    lowStaveNote.addModifier(new FretHandFinger(lowNotes[i].split('/')[0].toUpperCase()), i)
+                    lowStaveNote.addModifier(new FretHandFinger(this.capFirst(lowNotes[i].split('/')[0])), i)
                 }
 
                 const notesLow = [
@@ -276,6 +298,12 @@ var app = new Vue({
             staveBass.setNoteStartX(startX);
             formatter.format(voices, 240);
 
+            var fixKeySigNote = this.keySigUp.getWidth()
+            var fixKeySigFret = 10
+            // C调需要调整10
+            if (this.keyStr === 'C') {
+                fixKeySigNote -= 10
+            }
             var fretCount = 0
             if (lowNotes.length !== 0) {
                 this.lowVoice.draw(context, staveBass);
@@ -285,17 +313,17 @@ var app = new Vue({
                 lowStaveNote.getModifiers().forEach((element) => {
                     if (element.getCategory() === 'Accidental') {
                         // fix note x
-                        element.setXShift(lowStaveNote.getX() - this.noteFixX - element.getXShift())
+                        element.setXShift(lowStaveNote.getX() - this.noteFixX - element.getXShift() + fixKeySigNote)
                     } else if (element.getCategory() === 'FretHandFinger') {
                         // fix fretHandFinger x
-                        element.setXShift(this.fretFixX - (fretCount % 3) * 20)
+                        element.setXShift(this.fretFixX - (fretCount % 3) * 20 + fixKeySigFret)
                         element.setPosition(Modifier.Position.RIGHT)
                         element.setFont({weight: 1})
                         fretCount += 1
                     }
                 });
 
-                lowStaveNote.setXShift(this.noteFixX - lowStaveNote.getX())
+                lowStaveNote.setXShift(this.noteFixX - lowStaveNote.getX()- fixKeySigNote)
                 lowStaveNote.draw(context, staveBass);
             }
             if (upNotes.length !== 0) {
@@ -306,17 +334,17 @@ var app = new Vue({
                 upStaveNote.getModifiers().forEach((element) => {
                     if (element.getCategory() === 'Accidental') {
                         // fix note x
-                        element.setXShift(upStaveNote.getX() - this.noteFixX - element.getXShift())
+                        element.setXShift(upStaveNote.getX() - this.noteFixX - element.getXShift() + fixKeySigNote)
                     } else if (element.getCategory() === 'FretHandFinger') {
                         // fix fretHandFinger x
-                        element.setXShift(this.fretFixX - (fretCount % 3) * 20)
+                        element.setXShift(this.fretFixX - (fretCount % 3) * 20 + fixKeySigFret)
                         element.setPosition(Modifier.Position.RIGHT)
                         element.setFont({weight: 1})
                         fretCount += 1
                     }
                 });
 
-                upStaveNote.setXShift(this.noteFixX - upStaveNote.getX())
+                upStaveNote.setXShift(this.noteFixX - upStaveNote.getX()- fixKeySigNote)
                 upStaveNote.draw(context, staveTreble);
             }
 

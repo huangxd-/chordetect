@@ -20,17 +20,63 @@ var app = new Vue({
         pageHeight: window.innerHeight,
         keyWidth: null,
         blackKeyWidth: null,
-        keyList: ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'],
-        midiCode: ['a/0', 'a#/0', 'b/0',
-            'c/1', 'c#/1', 'd/1', 'eb/1', 'e/1', 'f/1', 'f#/1', 'g/1', 'ab/1', 'a/1', 'bb/1', 'b/1',
-            'c/2', 'c#/2', 'd/2', 'eb/2', 'e/2', 'f/2', 'f#/2', 'g/2', 'ab/2', 'a/2', 'bb/2', 'b/2',
-            'c/3', 'c#/3', 'd/3', 'eb/3', 'e/3', 'f/3', 'f#/3', 'g/3', 'ab/3', 'a/3', 'bb/3', 'b/3',
-            'c/4', 'c#/4', 'd/4', 'eb/4', 'e/4', 'f/4', 'f#/4', 'g/4', 'ab/4', 'a/4', 'bb/4', 'b/4',
-            'c/5', 'c#/5', 'd/5', 'eb/5', 'e/5', 'f/5', 'f#/5', 'g/5', 'ab/5', 'a/5', 'bb/5', 'b/5',
-            'c/6', 'c#/6', 'd/6', 'eb/6', 'e/6', 'f/6', 'f#/6', 'g/6', 'ab/6', 'a/6', 'bb/6', 'b/6',
-            'c/7', 'c#/7', 'd/7', 'eb/7', 'e/7', 'f/7', 'f#/7', 'g/7', 'ab/7', 'a/7', 'bb/7', 'b/7',
-            'c/8'],
-        keyNames: ['A', 'Bb', 'B', 'C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'],
+        keyList: ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B', 'Db', 'Gb', 'Cb'],
+        keyScaleList: {'C': null, 'C#': '#', 'D': '#', 'Eb': 'b', 'E': '#', 'F': 'b', 'F#': '#', 'G': '#',
+            'Ab': 'b', 'A': '#', 'Bb': 'b', 'B': '#', 'Db': 'b', 'Gb': 'b', 'Cb': 'b'},
+        keyNoteList: {
+            'C': [null, null, null, null, null, null, null],
+            'C#': ['#', '#', '#', '#', '#', '#', '#'],
+            'D': ['#', null, null, '#', null, null, null],
+            'Eb': [null, null, 'b', null, null, 'b', 'b'],
+            'E': ['#', '#', null, '#', '#', null, null],
+            'F': [null, null, null, null, null, null, 'b'],
+            'F#': ['#', '#', '#', '#', '#', '#', null],
+            'G': [null, null, null, '#', null, null, null],
+            'Ab': [null, 'b', 'b', null, null, 'b', 'b'],
+            'A': ['#', null, null, '#', '#', null, null],
+            'Bb': [null, null, 'b', null, null, null, 'b'],
+            'B': ['#', '#', null, '#', '#', '#', null],
+            'Db': [null, 'b', 'b', null, 'b', 'b', 'b'],
+            'Gb': ['b', 'b', 'b', null, 'b', 'b', 'b'],
+            'Cb': ['b', 'b', 'b', 'b', 'b', 'b', 'b']
+        },
+        keyNoteDict: {
+            'C': ['c', 'c#', 'd', 'eb', 'e', 'f', 'f#', 'g', 'ab', 'a', 'bb', 'b'],
+            'C#': ['cn', 'c', 'dn', 'd', 'en', 'fn', 'f', 'gn', 'g', 'an', 'a', 'bn'],
+            'D': ['cn', 'c', 'd', 'd#', 'e', 'fn', 'f', 'g', 'g#', 'a', 'a#', 'b'],
+            'Eb': ['c', 'db', 'd', 'e', 'en', 'f', 'gb', 'g', 'a', 'an', 'b', 'bn'],
+            'E': ['cn', 'c', 'dn', 'd', 'e', 'fn', 'f', 'gn', 'g', 'a', 'a#', 'b'],
+            'F': ['c', 'db', 'd', 'eb', 'e', 'f', 'gb', 'g', 'ab', 'a', 'b', 'bn'],
+            'F#': ['cn', 'c', 'dn', 'd', 'en', 'fn', 'f', 'gn', 'g', 'an', 'a', 'b'],
+            'G': ['c', 'c#', 'd', 'd#', 'e', 'fn', 'f', 'g', 'g#', 'a', 'a#', 'b'],
+            'Ab': ['c', 'd', 'dn', 'e', 'en', 'f', 'gb', 'g', 'a', 'an', 'b', 'bn'],
+            'A': ['cn', 'c', 'd', 'd#', 'e', 'fn', 'f', 'gn', 'g', 'a', 'a#', 'b'],
+            'Bb': ['c', 'db', 'd', 'e', 'en', 'f', 'gb', 'g', 'ab', 'a', 'b', 'bn'],
+            'B': ['cn', 'c', 'dn', 'd', 'e', 'fn', 'f', 'gn', 'g', 'an', 'a', 'b'],
+            'Db': ['c', 'd', 'dn', 'e', 'en', 'f', 'g', 'gn', 'a', 'an', 'b', 'bn'],
+            'Gb': ['cn', 'd', 'dn', 'e', 'en', 'f', 'g', 'gn', 'a', 'an', 'b', 'bn'],
+            'Cb': ['cn', 'd', 'dn', 'e', 'en', 'fn', 'g', 'gn', 'a', 'an', 'b', 'bn']
+        },
+        keyFretDict: {
+            'C': ['c', 'c#', 'd', 'eb', 'e', 'f', 'f#', 'g', 'ab', 'a', 'bb', 'b'],
+            'C#': ['c♮', 'c#', 'd♮', 'd#', 'e♮', 'f♮', 'f#', 'g♮', 'g#', 'a♮', 'a#', 'b♮'],
+            'D': ['c♮', 'c#', 'd', 'd#', 'e', 'f♮', 'f#', 'g', 'g#', 'a', 'a#', 'b'],
+            'Eb': ['c', 'db', 'd', 'eb', 'e♮', 'f', 'gb', 'g', 'ab', 'a♮', 'bb', 'b♮'],
+            'E': ['c♮', 'c#', 'd♮', 'd#', 'e', 'f♮', 'f#', 'g♮', 'g#', 'a', 'a#', 'b'],
+            'F': ['c', 'db', 'd', 'eb', 'e', 'f', 'gb', 'g', 'ab', 'a', 'bb', 'b♮'],
+            'F#': ['c♮', 'c#', 'd♮', 'd#', 'e♮', 'f♮', 'f#', 'g♮', 'g#', 'a♮', 'a#', 'b'],
+            'G': ['c', 'c#', 'd', 'd#', 'e', 'f♮', 'f#', 'g', 'g#', 'a', 'a#', 'b'],
+            'Ab': ['c', 'db', 'd♮', 'eb', 'e♮', 'f', 'gb', 'g', 'ab', 'a♮', 'bb', 'b♮'],
+            'A': ['c♮', 'c#', 'd', 'd#', 'e', 'f♮', 'f#', 'g♮', 'g#', 'a', 'a#', 'b'],
+            'Bb': ['c', 'db', 'd', 'eb', 'e♮', 'f', 'gb', 'g', 'ab', 'a', 'bb', 'b♮'],
+            'B': ['c♮', 'c#', 'd♮', 'd#', 'e', 'f♮', 'f#', 'g♮', 'g#', 'a♮', 'a#', 'b'],
+            'Db': ['c', 'db', 'd♮', 'eb', 'e♮', 'f', 'gb', 'g♮', 'ab', 'a♮', 'bb', 'b♮'],
+            'Gb': ['c♮', 'db', 'd♮', 'eb', 'e♮', 'f', 'gb', 'g♮', 'ab', 'a♮', 'bb', 'b♮'],
+            'Cb': ['c♮', 'db', 'd♮', 'eb', 'e♮', 'f♮', 'gb', 'g♮', 'ab', 'a♮', 'bb', 'b♮']
+        },
+        midiCode: [],
+        keyMidiCode: [],
+        keyNames: ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'],
         lowNoteMidiArr: [],
         upNoteMidiArr: [],
         scoreContext: null,
@@ -49,9 +95,6 @@ var app = new Vue({
         keyTextLow: null,
     },
     created: function () {
-
-        this.initKeyboard();
-
         WebMidi.enable((errorMessage) => {
 
             if (errorMessage) {
@@ -64,6 +107,11 @@ var app = new Vue({
                 this.selectedMidiInputId = WebMidi.inputs[0].id;
             }
         });
+
+        this.midiCode = this.genKeyFretMidiCode(this.keyStr)
+        this.keyMidiCode = this.genKeyMidiCode(this.keyStr)
+
+        this.initKeyboard();
 
         this.initScore()
 
@@ -117,6 +165,9 @@ var app = new Vue({
         },
 
         keyStr() {
+            this.midiCode = this.genKeyFretMidiCode(this.keyStr)
+            this.keyMidiCode = this.genKeyMidiCode(this.keyStr)
+            this.initKeyboard()
             this.refreshScore()
         },
     },
@@ -149,7 +200,7 @@ var app = new Vue({
                 keys.push({
                     velocity: 0,
                     pushed: false,
-                    name: this.keyNames[i % 12],
+                    name: this.capFirst(this.keyFretDict[this.keyStr][(i + 9) % 12]),
                 });
             }
 
@@ -222,7 +273,7 @@ var app = new Vue({
             }
         },
 
-        renderScore(noteArr) {
+        renderScore(noteArr, noteAdjustKeyArr) {
             this.rmScore()
             this.initScore()
 
@@ -236,29 +287,33 @@ var app = new Vue({
 
             const upNotes = []
             const lowNotes = []
+            const upAdjustKeyNotes = []
+            const lowAdjustKeyNotes = []
             var upStaveNote = null
             var lowStaveNote = null
 
-            noteArr.forEach(function (key) {
-                if (parseInt(key.split('/')[1]) >= 4) {
-                    upNotes.push(key)
+            for (let i = 0; i < noteArr.length; ++i) {
+                if (parseInt(noteArr[i].split('/')[1]) >= 4) {
+                    upNotes.push(noteArr[i])
+                    upAdjustKeyNotes.push(noteAdjustKeyArr[i])
                 } else {
-                    lowNotes.push(key)
+                    lowNotes.push(noteArr[i])
+                    lowAdjustKeyNotes.push(noteAdjustKeyArr[i])
                 }
-            })
+            }
 
             const voices = [];
             var formatter = new Formatter();
 
             if (upNotes.length !== 0) {
                 upStaveNote = new StaveNote({
-                    keys: upNotes,
+                    keys: upAdjustKeyNotes,
                     duration: "w",
                 })
 
                 for (let i = 0; i < upNotes.length; ++i) {
-                    if (upNotes[i].split('/')[0].length > 1) {
-                        upStaveNote.addModifier(new Accidental(upNotes[i].split('/')[0][1]), i)
+                    if (upAdjustKeyNotes[i].split('/')[0].length > 1) {
+                        upStaveNote.addModifier(new Accidental(upAdjustKeyNotes[i].split('/')[0][1]), i)
                     }
                     upStaveNote.addModifier(new FretHandFinger(this.capFirst(upNotes[i].split('/')[0])), i)
                 }
@@ -275,14 +330,14 @@ var app = new Vue({
 
             if (lowNotes.length !== 0) {
                 lowStaveNote = new StaveNote({
-                    keys: lowNotes,
+                    keys: lowAdjustKeyNotes,
                     duration: "w",
                     clef: 'bass',
                 })
 
                 for (let i = 0; i < lowNotes.length; ++i) {
-                    if (lowNotes[i].split('/')[0].length > 1) {
-                        lowStaveNote.addModifier(new Accidental(lowNotes[i].split('/')[0][1]), i)
+                    if (lowAdjustKeyNotes[i].split('/')[0].length > 1) {
+                        lowStaveNote.addModifier(new Accidental(lowAdjustKeyNotes[i].split('/')[0][1]), i)
                     }
                     lowStaveNote.addModifier(new FretHandFinger(this.capFirst(lowNotes[i].split('/')[0])), i)
                 }
@@ -304,7 +359,7 @@ var app = new Vue({
 
             var fixKeySigNote = this.keySigUp.getWidth()
             var fixKeySigFret = 10
-            // C调需要调整10
+            // C key need adjust 10
             if (this.keyStr === 'C') {
                 fixKeySigNote -= 10
             }
@@ -356,12 +411,34 @@ var app = new Vue({
 
         refreshScore() {
             var noteArr = []
+            var noteAdjustKeyArr = []
             for (let i = 0; i < 89; ++i) {
                 if (this.keys[i] && this.keys[i].velocity !== 0) {
                     noteArr.push(this.midiCode[i])
+                    noteAdjustKeyArr.push(this.keyMidiCode[i])
                 }
             }
-            this.renderScore(noteArr)
-        }
+            this.renderScore(noteArr, noteAdjustKeyArr)
+        },
+
+        genKeyMidiCode(key) {
+            var keyMidiCode = []
+            for (let i = 0; i < 9; ++i) {
+                for (let j = 0; j < 12; ++j) {
+                    keyMidiCode[i * 12 + j] = `${this.keyNoteDict[key][j]}/${i}`
+                }
+            }
+            return keyMidiCode.slice(9, 97)
+        },
+
+        genKeyFretMidiCode(key) {
+            var keyFretMidiCode = []
+            for (let i = 0; i < 9; ++i) {
+                for (let j = 0; j < 12; ++j) {
+                        keyFretMidiCode[i * 12 + j] = `${this.keyFretDict[key][j]}/${i}`
+                }
+            }
+            return keyFretMidiCode.slice(9, 97)
+        },
     }
 });

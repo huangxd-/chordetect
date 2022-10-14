@@ -1,6 +1,6 @@
 Object.defineProperty(Vue.prototype, 'WebMidi', {value: WebMidi});
 const {Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
-    KeySignature, KeyManager} = Vex.Flow;
+    KeySignature, KeyManager, StaveText, StaveModifierPosition} = Vex.Flow;
 const scorePanelScale = 1.3
 
 var app = new Vue({
@@ -38,14 +38,15 @@ var app = new Vue({
         staveBass: null,
         upVoice: null,
         lowVoice: null,
-        scorePanelWidth: 280 * scorePanelScale,
+        scorePanelWidth: 320 * scorePanelScale,
         scorePanelHeight: 320 * scorePanelScale,
-        noteFixX: 100,
+        noteFixX: 140,
         fretFixX: -50,
         keyStr: 'C',
         keySigUp: null,
         keySigLow: null,
-
+        keyTextUp: null,
+        keyTextLow: null,
     },
     created: function () {
 
@@ -201,6 +202,9 @@ var app = new Vue({
             this.keySigUp.addToStave(this.staveTreble)
             this.keySigLow = new KeySignature(this.keyStr)
             this.keySigLow.addToStave(this.staveBass)
+
+            this.keyTextUp = new StaveText(`Key: ${this.keyStr}`, StaveModifierPosition.ABOVE, { justification: 0 } )
+            this.staveTreble.addModifier(this.keyTextUp)
 
             const connector = new StaveConnector(this.staveTreble, this.staveBass);
             connector.setType(StaveConnector.type.SINGLE);

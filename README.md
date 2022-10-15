@@ -1,1 +1,1 @@
-# WebChordieApp
+# Chordetect

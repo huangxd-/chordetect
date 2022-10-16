@@ -45,6 +45,10 @@
         </div>
     </div>
     <div id="p-wrapper">
+        <div id="sustainPanel">
+            <div id="sustainCircle" :style="{backgroundColor: sustainCircleColor}"></div>
+            <span id="sustainText">Sustain</span>
+        </div>
         <ul id="pianoNote">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">
                 <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">

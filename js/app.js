@@ -192,6 +192,13 @@ var app = new Vue({
         chordPanelHeight: function () {
             return `${this.scorePanelHeight}px`;
         },
+        sustainCircleColor: function () {
+            if (this.holdPedal === true) {
+                return '#007069'
+            } else {
+                return '#ffffff'
+            }
+        },
     },
     methods: {
         initKeyboard() {

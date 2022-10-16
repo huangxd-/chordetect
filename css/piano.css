@@ -60,6 +60,27 @@ body {
     padding-left: 20px;
 }
 
+#sustainPanel {
+    display: flex;
+    justify-content: right;
+    margin-right: 80px;
+}
+
+#sustainCircle {
+    width:10px;
+    height:10px;
+    border:2px solid #000;
+    border-radius:50%;
+}
+
+#sustainText {
+    width:auto;
+    height:14px;
+    margin-left: 5px;
+    font-size: 8px;
+    line-height: 14px;
+}
+
 /* Tuts */
 ul#piano {
     display: inline-block;

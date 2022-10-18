@@ -1,6 +1,8 @@
 Object.defineProperty(Vue.prototype, 'WebMidi', {value: WebMidi});
-const {Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
-    KeySignature, KeyManager, StaveText, StaveModifierPosition} = Vex.Flow;
+const {
+    Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
+    KeySignature, KeyManager, StaveText, StaveModifierPosition
+} = Vex.Flow;
 const scorePanelScale = 1.3
 
 var app = new Vue({
@@ -21,8 +23,10 @@ var app = new Vue({
         keyWidth: null,
         blackKeyWidth: null,
         keyList: ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B', 'Db', 'Gb', 'Cb'],
-        keyScaleList: {'C': null, 'C#': '#', 'D': '#', 'Eb': 'b', 'E': '#', 'F': 'b', 'F#': '#', 'G': '#',
-            'Ab': 'b', 'A': '#', 'Bb': 'b', 'B': '#', 'Db': 'b', 'Gb': 'b', 'Cb': 'b'},
+        keyScaleList: {
+            'C': null, 'C#': '#', 'D': '#', 'Eb': 'b', 'E': '#', 'F': 'b', 'F#': '#', 'G': '#',
+            'Ab': 'b', 'A': '#', 'Bb': 'b', 'B': '#', 'Db': 'b', 'Gb': 'b', 'Cb': 'b'
+        },
         keyNoteList: {
             'C': [null, null, null, null, null, null, null],
             'C#': ['#', '#', '#', '#', '#', '#', '#'],
@@ -93,6 +97,7 @@ var app = new Vue({
         keySigLow: null,
         keyTextUp: null,
         keyTextLow: null,
+        instrument: "acoustic_grand_piano",
     },
     created: function () {
         WebMidi.enable((errorMessage) => {
@@ -108,13 +113,14 @@ var app = new Vue({
             }
         });
 
+        this.initMidi()
+
         this.midiCode = this.genKeyFretMidiCode(this.keyStr)
         this.keyMidiCode = this.genKeyMidiCode(this.keyStr)
 
         this.initKeyboard();
 
         this.initScore()
-
     },
     watch: {
         selectedMidiInputId(newMidiInputId) {
@@ -131,11 +137,15 @@ var app = new Vue({
 
                         this.refreshScore()
                     }
+
+                    MIDI.setVolume(0, 127);
+                    MIDI.noteOn(0, event.note.number, event.velocity * 127, 0);
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {
                     var note = event.note.number - this.offsetKeys + this.transpose;
                     if (0 <= note && note < this.keys.length) {
                         if (!this.holdPedal) {
+                            MIDI.noteOff(0, event.note.number, 0);
                             this.keys[note].velocity = 0;
                         }
                         this.keys[note].pushed = false;
@@ -152,6 +162,7 @@ var app = new Vue({
                             this.holdPedal = false;
                             for (var i = 0; i < this.keys.length; ++i) {
                                 if (!this.keys[i].pushed) {
+                                    MIDI.noteOff(0, i + 21, 0);
                                     this.keys[i].velocity = 0;
                                 }
                             }
@@ -241,6 +252,27 @@ var app = new Vue({
             return str[0].toUpperCase() + str.slice(1);
         },
 
+        initMidi() {
+            const inst = this.instrument
+            MIDI.loadPlugin({
+                api: "webaudio",
+                soundfontUrl: "../soundfont/",
+                instrument: inst,
+                onprogress: function (state, progress) {
+                    return typeof console !== "undefined" && console !== null ? console.log(state, progress) : void 0;
+                },
+                onerror: function (err) {
+                    return typeof console !== "undefined" && console !== null ? console.error(err) : void 0;
+                },
+                onsuccess: function () {
+                    if (typeof console !== "undefined" && console !== null) {
+                        console.log("MIDI.js loaded");
+                    }
+                    return MIDI.programChange(0, MIDI.GM.byName[inst].number);
+                }
+            });
+        },
+
         initScore() {
             const div = document.getElementById('scorePanel');
             const renderer = new Renderer(div, Renderer.Backends.SVG);
@@ -261,7 +293,7 @@ var app = new Vue({
             this.keySigLow = new KeySignature(this.keyStr)
             this.keySigLow.addToStave(this.staveBass)
 
-            this.keyTextUp = new StaveText(`Key: ${this.keyStr}`, StaveModifierPosition.ABOVE, { justification: 0 } )
+            this.keyTextUp = new StaveText(`Key: ${this.keyStr}`, StaveModifierPosition.ABOVE, {justification: 0})
             this.staveTreble.addModifier(this.keyTextUp)
 
             const connector = new StaveConnector(this.staveTreble, this.staveBass);
@@ -389,7 +421,7 @@ var app = new Vue({
                     }
                 });
 
-                lowStaveNote.setXShift(this.noteFixX - lowStaveNote.getX()- fixKeySigNote)
+                lowStaveNote.setXShift(this.noteFixX - lowStaveNote.getX() - fixKeySigNote)
                 lowStaveNote.draw(context, staveBass);
             }
             if (upNotes.length !== 0) {
@@ -410,7 +442,7 @@ var app = new Vue({
                     }
                 });
 
-                upStaveNote.setXShift(this.noteFixX - upStaveNote.getX()- fixKeySigNote)
+                upStaveNote.setXShift(this.noteFixX - upStaveNote.getX() - fixKeySigNote)
                 upStaveNote.draw(context, staveTreble);
             }
 
@@ -442,7 +474,7 @@ var app = new Vue({
             var keyFretMidiCode = []
             for (let i = 0; i < 9; ++i) {
                 for (let j = 0; j < 12; ++j) {
-                        keyFretMidiCode[i * 12 + j] = `${this.keyFretDict[key][j]}/${i}`
+                    keyFretMidiCode[i * 12 + j] = `${this.keyFretDict[key][j]}/${i}`
                 }
             }
             return keyFretMidiCode.slice(9, 97)

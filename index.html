@@ -10,16 +10,38 @@
     <link rel="manifest" href="img/site.webmanifest">
 
     <link rel="stylesheet" type="text/css" href="css/piano.css" />
+    <link rel="stylesheet" type="text/css" href="css/iview.css" />
 
     <script src="js/webmidi.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/vexflow.js"></script>
     <script src="js/MIDI.js"></script>
     <script src="js/base64-binary.js"></script>
+    <script src="js/iview.min.js"></script>
 </head>
 <body>
 
 <div id="app">
+
+    <template>
+    <i-button type="primary" @click="modal13 = true" ghost icon="logo-facebook">设置</i-button>
+    <Modal v-model="modal13" draggable sticky scrollable :mask="false" title="设置">
+        <i-tabs type="card">
+            <i-tab-pane label="标签一" name="tab1">
+                <Select v-model="model2" size="small" style="width:100px">
+                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+                <p>ssssssss</p>
+                <p>ssssssss</p>
+                <p>ssssssss</p>
+                <p>ssssssss</p>
+                <p>ssssssss</p>
+            </i-tab-pane>
+            <i-tab-pane label="标签二" name="tab2">标签二的内容</i-tab-pane>
+            <i-tab-pane label="标签三" name="tab3">标签三的内容</i-tab-pane>
+        </i-tabs>
+    </Modal>
+    </template>
 
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     <div v-else-if="midiInput == null">Looking for an input MIDI device…</div>
@@ -76,8 +98,6 @@
                 </div>
             </li>
         </ul>
-    </div>
-
     </div>
 </div>
 

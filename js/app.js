@@ -3,11 +3,16 @@ const {
     Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
     KeySignature, KeyManager, StaveText, StaveModifierPosition
 } = Vex.Flow;
+const {Tabs, TabPane} = iview
 const scorePanelScale = 1.3
 
 var app = new Vue({
     el: '#app',
     props: {},
+    components: {
+        'ITabs': Tabs,
+        'ITabPane': TabPane
+    },
     data: {
         nbKeys: 88,
         offsetKeys: 21,
@@ -98,6 +103,34 @@ var app = new Vue({
         keyTextUp: null,
         keyTextLow: null,
         instrument: "acoustic_grand_piano",
+        modal13: false,
+        cityList: [
+            {
+                value: 'New York',
+                label: 'New York'
+            },
+            {
+                value: 'London',
+                label: 'London'
+            },
+            {
+                value: 'Sydney',
+                label: 'Sydney'
+            },
+            {
+                value: 'Ottawa',
+                label: 'Ottawa'
+            },
+            {
+                value: 'Paris',
+                label: 'Paris'
+            },
+            {
+                value: 'Canberra',
+                label: 'Canberra'
+            }
+        ],
+        model2: '',
     },
     created: function () {
         WebMidi.enable((errorMessage) => {

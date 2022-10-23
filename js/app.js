@@ -6,8 +6,14 @@ const {
 const {Tabs, TabPane} = iview
 const scorePanelScale = 1.3
 
+var i18n = new VueI18n({
+    locale: 'zh_CN',
+    messages: i18nMessages
+})
+
 var app = new Vue({
     el: '#app',
+    i18n,
     props: {},
     components: {
         'ITabs': Tabs,
@@ -103,34 +109,18 @@ var app = new Vue({
         keyTextUp: null,
         keyTextLow: null,
         instrument: "acoustic_grand_piano",
-        modal13: false,
-        cityList: [
+        modalSetting: false,
+        languageList: [
             {
-                value: 'New York',
-                label: 'New York'
+                value: 'zh_CN',
+                label: i18n.t("chinese")
             },
             {
-                value: 'London',
-                label: 'London'
+                value: 'en_US',
+                label: i18n.t("english")
             },
-            {
-                value: 'Sydney',
-                label: 'Sydney'
-            },
-            {
-                value: 'Ottawa',
-                label: 'Ottawa'
-            },
-            {
-                value: 'Paris',
-                label: 'Paris'
-            },
-            {
-                value: 'Canberra',
-                label: 'Canberra'
-            }
         ],
-        model2: '',
+        modelLanguage: 'zh_CN',
     },
     created: function () {
         WebMidi.enable((errorMessage) => {
@@ -245,6 +235,9 @@ var app = new Vue({
         },
     },
     methods: {
+        languageChange(event) {
+            i18n.locale = event
+        },
         initKeyboard() {
             var keys = [];
             for (var i = 0; i < this.nbKeys; ++i) {

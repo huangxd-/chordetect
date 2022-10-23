@@ -30,6 +30,10 @@ body {
     background: #F5F5F5;
 }
 
+.iSelect {
+    margin: 10px;
+}
+
 #scoreWrap {
     display: flex;
     justify-content: center;

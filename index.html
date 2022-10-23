@@ -18,30 +18,43 @@
     <script src="js/MIDI.js"></script>
     <script src="js/base64-binary.js"></script>
     <script src="js/iview.min.js"></script>
+    <script src="i18n/i18nMessages.js"></script>
+    <script src="js/vue-i18n.min.js"></script>
 </head>
 <body>
 
 <div id="app">
 
-    <template>
-    <i-button type="primary" @click="modal13 = true" ghost icon="logo-facebook">设置</i-button>
-    <Modal v-model="modal13" draggable sticky scrollable :mask="false" title="设置">
+    <i-button type="primary" @click="modalSetting = true" ghost icon="logo-facebook">{{ $t('settings') }}</i-button>
+    <Modal v-model="modalSetting" draggable sticky scrollable :mask="false" :title="$t('settings')" :footer-hide="true">
         <i-tabs type="card">
-            <i-tab-pane label="标签一" name="tab1">
-                <Select v-model="model2" size="small" style="width:100px">
-                    <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                </Select>
-                <p>ssssssss</p>
-                <p>ssssssss</p>
-                <p>ssssssss</p>
-                <p>ssssssss</p>
-                <p>ssssssss</p>
+            <i-tab-pane :label="$t('display')" name="tab1">
+                <span>{{ $t('language') }}</span>:
+                <i-select class="iSelect" v-model="modelLanguage" size="small" style="width: auto" @on-change="languageChange($event)">
+                    <i-option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                </i-select>
+                <p>调式选择</p>
+                <p>和弦升降号设置</p>
+                <p>键盘按键颜色设置[分为踩踏板和不踩踏板]另外还有多彩模式</p>
+                <p>吉他图弹出</p>
+                <p>和弦字典弹出</p>
+                <p>移动端不息屏</p>
             </i-tab-pane>
-            <i-tab-pane label="标签二" name="tab2">标签二的内容</i-tab-pane>
-            <i-tab-pane label="标签三" name="tab3">标签三的内容</i-tab-pane>
+            <i-tab-pane label="MIDI" name="tab2">
+                <p>midi输入选择</p>
+            </i-tab-pane>
+            <i-tab-pane :label="$t('audio')" name="tab3">
+                <p>音量大小设置/禁音</p>
+                <p>音源</p>
+                <p>节拍器</p>
+            </i-tab-pane>
+            <i-tab-pane :label="$t('other')" name="tab4">
+                <p>帮助文档</p>
+                <p>github地址</p>
+                <p>捐献</p>
+            </i-tab-pane>
         </i-tabs>
     </Modal>
-    </template>
 
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>
     <div v-else-if="midiInput == null">Looking for an input MIDI device…</div>

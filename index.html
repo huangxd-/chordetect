@@ -30,15 +30,19 @@
         <i-tabs type="card">
             <i-tab-pane :label="$t('display')" name="tab1">
                 <span>{{ $t('language') }}</span>:
-                <i-select class="iSelect" v-model="modelLanguage" size="small" style="width: auto" @on-change="languageChange($event)">
+                <i-select class="iSelect" v-model="modelLanguage" style="width: auto" @on-change="languageChange($event)">
                     <i-option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
                 </i-select>
+                <br>
+                <span>{{ $t('chordDic') }}</span>:
+                <i-switch class="iSwitch" v-model="switchChordDic" @on-change="changeSwitchChordDic">
+                    <Icon type="md-checkmark" slot="open"></Icon>
+                    <Icon type="md-close" slot="close"></Icon>
+                </i-switch>
                 <p>调式选择</p>
-                <p>和弦升降号设置</p>
+                <p>和弦升降号设置，默认跟随调式</p>
                 <p>键盘按键颜色设置[分为踩踏板和不踩踏板]另外还有多彩模式</p>
                 <p>吉他图弹出</p>
-                <p>和弦字典弹出</p>
-                <p>移动端不息屏</p>
             </i-tab-pane>
             <i-tab-pane label="MIDI" name="tab2">
                 <p>midi输入选择</p>
@@ -54,6 +58,9 @@
                 <p>捐献</p>
             </i-tab-pane>
         </i-tabs>
+    </Modal>
+    <Modal v-model="modalChordDic" draggable sticky scrollable :mask="false" :title="$t('chordDic')" :footer-hide="true" @on-visible-change="changeModalChordDic">
+
     </Modal>
 
     <div v-if="errorMessage" class="error">{{ errorMessage }}</div>

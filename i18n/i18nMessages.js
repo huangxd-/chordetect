@@ -7,6 +7,7 @@ const i18nMessages = {
 		'display': '显示',
 		'audio': '音频',
 		'other': '其他',
+		'chordDic': '和弦字典',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -15,5 +16,6 @@ const i18nMessages = {
 		'display': 'Display',
 		'audio': 'Audio',
 		'other': 'Other',
+		'chordDic': 'ChordDictionary',
 	}
 }

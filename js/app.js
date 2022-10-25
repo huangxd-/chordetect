@@ -121,6 +121,8 @@ var app = new Vue({
             },
         ],
         modelLanguage: 'zh_CN',
+        switchChordDic: false,
+        modalChordDic: false,
     },
     created: function () {
         WebMidi.enable((errorMessage) => {
@@ -237,6 +239,12 @@ var app = new Vue({
     methods: {
         languageChange(event) {
             i18n.locale = event
+        },
+        changeSwitchChordDic(status) {
+            this.modalChordDic = status
+        },
+        changeModalChordDic(status) {
+            this.switchChordDic = status
         },
         initKeyboard() {
             var keys = [];

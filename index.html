@@ -39,7 +39,11 @@
                     <Icon type="md-checkmark" slot="open"></Icon>
                     <Icon type="md-close" slot="close"></Icon>
                 </i-switch>
-                <p>调式选择</p>
+                <br>
+                <span>{{ $t('keySignature') }}</span>:
+                <i-select class="iSelect" v-model="modelKeySignature" style="width: auto" @on-change="keySignatureChange($event)">
+                    <i-option v-for="item in keyList" :value="item" :key="item">{{ item }}</i-option>
+                </i-select>
                 <p>和弦升降号设置，默认跟随调式</p>
                 <p>键盘按键颜色设置[分为踩踏板和不踩踏板]另外还有多彩模式</p>
                 <p>吉他图弹出</p>
@@ -69,11 +73,6 @@
         <label for="midi-input">Midi Input:</label>
         <select id="midi-input" v-model="selectedMidiInputId">
             <option v-for="input in WebMidi.inputs" :value="input.id" :key="input.id">{{ input.name }}</option>
-        </select>
-
-        <label for="midi-input">Key:</label>
-        <select id="key-input" v-model="keyStr">
-            <option v-for="key in keyList" :value="key" :key="key">{{ key }}</option>
         </select>
 
         <label for="colors">Colors:</label>

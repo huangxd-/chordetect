@@ -103,7 +103,6 @@ var app = new Vue({
         scorePanelHeight: 320 * scorePanelScale,
         noteFixX: 140,
         fretFixX: -50,
-        keyStr: 'C',
         keySigUp: null,
         keySigLow: null,
         keyTextUp: null,
@@ -123,6 +122,7 @@ var app = new Vue({
         modelLanguage: 'zh_CN',
         switchChordDic: false,
         modalChordDic: false,
+        modelKeySignature: 'C',
     },
     created: function () {
         WebMidi.enable((errorMessage) => {
@@ -140,8 +140,8 @@ var app = new Vue({
 
         this.initMidi()
 
-        this.midiCode = this.genKeyFretMidiCode(this.keyStr)
-        this.keyMidiCode = this.genKeyMidiCode(this.keyStr)
+        this.midiCode = this.genKeyFretMidiCode(this.modelKeySignature)
+        this.keyMidiCode = this.genKeyMidiCode(this.modelKeySignature)
 
         this.initKeyboard();
 
@@ -199,13 +199,6 @@ var app = new Vue({
                 });
             }
         },
-
-        keyStr() {
-            this.midiCode = this.genKeyFretMidiCode(this.keyStr)
-            this.keyMidiCode = this.genKeyMidiCode(this.keyStr)
-            this.initKeyboard()
-            this.refreshScore()
-        },
     },
     computed: {
         liWidth: function () {
@@ -246,13 +239,20 @@ var app = new Vue({
         changeModalChordDic(status) {
             this.switchChordDic = status
         },
+        keySignatureChange(event) {
+            this.modelKeySignature = event
+            this.midiCode = this.genKeyFretMidiCode(this.modelKeySignature)
+            this.keyMidiCode = this.genKeyMidiCode(this.modelKeySignature)
+            this.initKeyboard()
+            this.refreshScore()
+        },
         initKeyboard() {
             var keys = [];
             for (var i = 0; i < this.nbKeys; ++i) {
                 keys.push({
                     velocity: 0,
                     pushed: false,
-                    name: this.capFirst(this.keyFretDict[this.keyStr][(i + 9) % 12]),
+                    name: this.capFirst(this.keyFretDict[this.modelKeySignature][(i + 9) % 12]),
                 });
             }
 
@@ -322,12 +322,12 @@ var app = new Vue({
             this.staveTreble.addClef('treble')
             this.staveBass.addClef('bass')
 
-            this.keySigUp = new KeySignature(this.keyStr)
+            this.keySigUp = new KeySignature(this.modelKeySignature)
             this.keySigUp.addToStave(this.staveTreble)
-            this.keySigLow = new KeySignature(this.keyStr)
+            this.keySigLow = new KeySignature(this.modelKeySignature)
             this.keySigLow.addToStave(this.staveBass)
 
-            this.keyTextUp = new StaveText(`Key: ${this.keyStr}`, StaveModifierPosition.ABOVE, {justification: 0})
+            this.keyTextUp = new StaveText(`Key: ${this.modelKeySignature}`, StaveModifierPosition.ABOVE, {justification: 0})
             this.staveTreble.addModifier(this.keyTextUp)
 
             const connector = new StaveConnector(this.staveTreble, this.staveBass);
@@ -433,7 +433,7 @@ var app = new Vue({
             var fixKeySigNote = this.keySigUp.getWidth()
             var fixKeySigFret = 10
             // C key need adjust 10
-            if (this.keyStr === 'C') {
+            if (this.modelKeySignature === 'C') {
                 fixKeySigNote -= 10
             }
             var fretCount = 0

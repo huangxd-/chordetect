@@ -8,6 +8,7 @@ const i18nMessages = {
 		'audio': '音频',
 		'other': '其他',
 		'chordDic': '和弦字典',
+		'keySignature': '调号',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -17,5 +18,6 @@ const i18nMessages = {
 		'audio': 'Audio',
 		'other': 'Other',
 		'chordDic': 'ChordDictionary',
+		'keySignature': 'KeySignature',
 	}
 }

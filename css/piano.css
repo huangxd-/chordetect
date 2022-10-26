@@ -38,6 +38,15 @@ body {
     margin: 10px;
 }
 
+.iSliderRow {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.iSlider {
+    margin-top: -7px;
+}
+
 #scoreWrap {
     display: flex;
     justify-content: center;

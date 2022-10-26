@@ -10,6 +10,7 @@ const i18nMessages = {
 		'chordDic': '和弦字典',
 		'keySignature': '调号',
 		'staffScale': '五线谱缩放比',
+		'guitarPanel': '吉他面板',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -21,5 +22,6 @@ const i18nMessages = {
 		'chordDic': 'ChordDictionary',
 		'keySignature': 'KeySignature',
 		'staffScale': 'StaffScale',
+		'guitarPanel': 'GuitarPanel',
 	}
 }

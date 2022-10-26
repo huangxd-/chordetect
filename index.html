@@ -45,12 +45,23 @@
                     <Icon type="md-close" slot="close"></Icon>
                 </i-switch>
                 <br>
-                <span>{{ $t('staffScale') }}</span>:
-                <Slider v-model="scorePanelScale" :step="0.1" :min="0.7" :max="2.5" @on-change="scorePanelScaleChange()"></Slider>
+                <span>{{ $t('guitarPanel') }}</span>:
+                <i-switch class="iSwitch" v-model="switchGuitarPanel" @on-change="changeSwitchGuitarPanel">
+                    <Icon type="md-checkmark" slot="open"></Icon>
+                    <Icon type="md-close" slot="close"></Icon>
+                </i-switch>
+                <br>
+                <Row class="iSliderRow">
+                    <i-col span="6">
+                        <span>{{ $t('staffScale') }}</span>:
+                    </i-col>
+                    <i-col span="17">
+                        <Slider class="iSlider" v-model="scorePanelScale" :step="0.1" :min="0.7" :max="2.5" @on-change="scorePanelScaleChange()"></Slider>
+                    </i-col>
+                </Row>
                 <br>
                 <p>和弦升降号设置，默认跟随调式</p>
                 <p>键盘按键颜色设置[分为踩踏板和不踩踏板]另外还有多彩模式</p>
-                <p>吉他图弹出</p>
             </i-tab-pane>
             <i-tab-pane label="MIDI" name="tab2">
                 <p>midi输入选择</p>
@@ -68,6 +79,9 @@
         </i-tabs>
     </Modal>
     <Modal v-model="modalChordDic" draggable sticky scrollable :mask="false" :title="$t('chordDic')" :footer-hide="true" @on-visible-change="changeModalChordDic">
+
+    </Modal>
+    <Modal v-model="modalGuitarPanel" draggable sticky scrollable :mask="false" :title="$t('guitarPanel')" :footer-hide="true" @on-visible-change="changeModalGuitarPanel">
 
     </Modal>
 

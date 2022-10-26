@@ -124,6 +124,8 @@ var app = new Vue({
         switchChordDic: false,
         modalChordDic: false,
         modelKeySignature: 'C',
+        switchGuitarPanel: false,
+        modalGuitarPanel: false,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -261,6 +263,12 @@ var app = new Vue({
             this.scorePanelHeight = scorePanelBaseWidthHeight * this.scorePanelScale
             this.rmScore()
             this.initScore()
+        },
+        changeSwitchGuitarPanel(status) {
+            this.modalGuitarPanel = status
+        },
+        changeModalGuitarPanel(status) {
+            this.switchGuitarPanel = status
         },
         initKeyboard() {
             var keys = [];

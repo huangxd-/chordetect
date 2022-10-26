@@ -9,6 +9,7 @@ const i18nMessages = {
 		'other': '其他',
 		'chordDic': '和弦字典',
 		'keySignature': '调号',
+		'staffScale': '五线谱缩放比',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -19,5 +20,6 @@ const i18nMessages = {
 		'other': 'Other',
 		'chordDic': 'ChordDictionary',
 		'keySignature': 'KeySignature',
+		'staffScale': 'StaffScale',
 	}
 }

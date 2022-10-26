@@ -29,6 +29,11 @@
     <Modal v-model="modalSetting" draggable sticky scrollable :mask="false" :title="$t('settings')" :footer-hide="true">
         <i-tabs type="card">
             <i-tab-pane :label="$t('display')" name="tab1">
+                <span>{{ $t('keySignature') }}</span>:
+                <i-select class="iSelect" v-model="modelKeySignature" style="width: auto" @on-change="keySignatureChange($event)">
+                    <i-option v-for="item in keyList" :value="item" :key="item">{{ item }}</i-option>
+                </i-select>
+                <br>
                 <span>{{ $t('language') }}</span>:
                 <i-select class="iSelect" v-model="modelLanguage" style="width: auto" @on-change="languageChange($event)">
                     <i-option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
@@ -40,10 +45,9 @@
                     <Icon type="md-close" slot="close"></Icon>
                 </i-switch>
                 <br>
-                <span>{{ $t('keySignature') }}</span>:
-                <i-select class="iSelect" v-model="modelKeySignature" style="width: auto" @on-change="keySignatureChange($event)">
-                    <i-option v-for="item in keyList" :value="item" :key="item">{{ item }}</i-option>
-                </i-select>
+                <span>{{ $t('staffScale') }}</span>:
+                <Slider v-model="scorePanelScale" :step="0.1" :min="0.7" :max="2.5" @on-change="scorePanelScaleChange()"></Slider>
+                <br>
                 <p>和弦升降号设置，默认跟随调式</p>
                 <p>键盘按键颜色设置[分为踩踏板和不踩踏板]另外还有多彩模式</p>
                 <p>吉他图弹出</p>
@@ -88,8 +92,8 @@
     <div id="scoreWrap" :style="{margin: scoreMarginLeft}">
         <div id="scorePanel"></div>
         <div id="chordPanel" :style="{width: chordPanelWidth, height: chordPanelHeight}">
-            <span id="preferChord">G7sus4</span>
-            <span id="secondaryChord">Cmaj7</span>
+            <span id="preferChord" :style="{'font-size': preferChordFontSize}">G7sus4</span>
+            <span id="secondaryChord" :style="{'font-size': secondaryChordFontSize}">Cmaj7</span>
         </div>
     </div>
     <div id="p-wrapper">

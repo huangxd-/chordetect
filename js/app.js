@@ -4,7 +4,7 @@ const {
     KeySignature, KeyManager, StaveText, StaveModifierPosition
 } = Vex.Flow;
 const {Tabs, TabPane} = iview
-const scorePanelScale = 1.3
+const scorePanelBaseWidthHeight = 320
 
 var i18n = new VueI18n({
     locale: 'zh_CN',
@@ -99,8 +99,9 @@ var app = new Vue({
         staveBass: null,
         upVoice: null,
         lowVoice: null,
-        scorePanelWidth: 320 * scorePanelScale,
-        scorePanelHeight: 320 * scorePanelScale,
+        scorePanelScale: 1.3,
+        scorePanelWidth: scorePanelBaseWidthHeight,
+        scorePanelHeight: scorePanelBaseWidthHeight,
         noteFixX: 140,
         fretFixX: -50,
         keySigUp: null,
@@ -125,6 +126,9 @@ var app = new Vue({
         modelKeySignature: 'C',
     },
     created: function () {
+        this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
+        this.scorePanelHeight = scorePanelBaseWidthHeight * this.scorePanelScale
+
         WebMidi.enable((errorMessage) => {
 
             if (errorMessage) {
@@ -228,6 +232,12 @@ var app = new Vue({
                 return '#ffffff'
             }
         },
+        preferChordFontSize: function () {
+            return `${this.scorePanelScale * 30}px`;
+        },
+        secondaryChordFontSize: function () {
+            return `${this.scorePanelScale * 15}px`;
+        },
     },
     methods: {
         languageChange(event) {
@@ -245,6 +255,12 @@ var app = new Vue({
             this.keyMidiCode = this.genKeyMidiCode(this.modelKeySignature)
             this.initKeyboard()
             this.refreshScore()
+        },
+        scorePanelScaleChange() {
+            this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
+            this.scorePanelHeight = scorePanelBaseWidthHeight * this.scorePanelScale
+            this.rmScore()
+            this.initScore()
         },
         initKeyboard() {
             var keys = [];
@@ -313,7 +329,7 @@ var app = new Vue({
 
             renderer.resize(this.scorePanelWidth, this.scorePanelHeight);
             this.scoreContext = renderer.getContext();
-            this.scoreContext.scale(scorePanelScale, scorePanelScale);
+            this.scoreContext.scale(this.scorePanelScale, this.scorePanelScale);
             this.scoreContext.setFont('Arial', 10);
 
             this.staveTreble = new Stave(10, 60, this.scorePanelWidth);

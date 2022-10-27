@@ -40,11 +40,20 @@ body {
 
 .iSliderRow {
     margin-top: 10px;
-    margin-bottom: 10px;
 }
 
 .iSlider {
     margin-top: -7px;
+}
+
+.iCheckbox {
+    margin: 10px;
+}
+
+.iColorPicker {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 #scoreWrap {

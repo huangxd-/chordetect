@@ -3,7 +3,7 @@ const {
     Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
     KeySignature, KeyManager, StaveText, StaveModifierPosition
 } = Vex.Flow;
-const {Tabs, TabPane} = iview
+const {Tabs, TabPane, ColorPicker} = iview
 const scorePanelBaseWidthHeight = 320
 
 var i18n = new VueI18n({
@@ -17,13 +17,13 @@ var app = new Vue({
     props: {},
     components: {
         'ITabs': Tabs,
-        'ITabPane': TabPane
+        'ITabPane': TabPane,
+        'IColorPicker': ColorPicker,
     },
     data: {
         nbKeys: 88,
         offsetKeys: 21,
         transpose: 0,
-        colors: false,
         errorMessage: null,
         selectedMidiInputId: null,
         midiInput: null,
@@ -126,6 +126,9 @@ var app = new Vue({
         modelKeySignature: 'C',
         switchGuitarPanel: false,
         modalGuitarPanel: false,
+        keyColorReleaseSustain: 'hsl(150, 100%, 50%)',
+        keyColorHoldSustain: 'hsl(200, 100%, 50%)',
+        colorfulCheckbox: false,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -294,7 +297,8 @@ var app = new Vue({
             }
 
             var alpha = velocity * 0.4 + 0.6;
-            var hue = this.colors ? ((index * 7) % 12) / 12 * 360 : 120;
+            var fixColor = this.holdPedal ? this.keyColorHoldSustain.split('(')[1].split(',')[0] : this.keyColorReleaseSustain.split('(')[1].split(',')[0];
+            var hue = this.colorfulCheckbox ? ((index * 7) % 12) / 12 * 360 : fixColor;
             if (type === 'color') {
                 return {
                     background: `hsla(${hue},100%,50%,${alpha})`

@@ -29,6 +29,13 @@
     <Modal v-model="modalSetting" draggable sticky scrollable :mask="false" :title="$t('settings')" :footer-hide="true">
         <i-tabs type="card">
             <i-tab-pane :label="$t('display')" name="tab1">
+                <span>{{ $t('keyColor') }}</span>:
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $t('releaseSustain') }}
+                <i-color-picker class="iColorPicker" v-model="keyColorReleaseSustain" format="hsl"></i-color-picker>
+                &nbsp;&nbsp;&nbsp;{{ $t('holdSustain') }}
+                <i-color-picker class="iColorPicker" v-model="keyColorHoldSustain" format="hsl"></i-color-picker>
+                <Checkbox class="iCheckbox" v-model="colorfulCheckbox" border>{{ $t('colorful') }}</Checkbox>
+                <br>
                 <span>{{ $t('keySignature') }}</span>:
                 <i-select class="iSelect" v-model="modelKeySignature" style="width: auto" @on-change="keySignatureChange($event)">
                     <i-option v-for="item in keyList" :value="item" :key="item">{{ item }}</i-option>
@@ -61,7 +68,6 @@
                 </Row>
                 <br>
                 <p>和弦升降号设置，默认跟随调式</p>
-                <p>键盘按键颜色设置[分为踩踏板和不踩踏板]另外还有多彩模式</p>
             </i-tab-pane>
             <i-tab-pane label="MIDI" name="tab2">
                 <p>midi输入选择</p>
@@ -92,9 +98,6 @@
         <select id="midi-input" v-model="selectedMidiInputId">
             <option v-for="input in WebMidi.inputs" :value="input.id" :key="input.id">{{ input.name }}</option>
         </select>
-
-        <label for="colors">Colors:</label>
-        <input type="checkbox" id="colors" v-model.boolean="colors">
     </div>
 <!--    <div class="credits">-->
 <!--        <a href="https://github.com/huangxd-/WebChordieApp">WebChordieApp</a>-->

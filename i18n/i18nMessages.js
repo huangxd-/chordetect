@@ -15,6 +15,8 @@ const i18nMessages = {
 		'releaseSustain': '松开踏板',
 		'holdSustain': '踩住踏板',
 		'colorful': '彩色',
+		'lookingForMidi': '正在查找MIDI输入设备…',
+		'midiInput': 'MIDI输入',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -31,5 +33,7 @@ const i18nMessages = {
 		'releaseSustain': 'ReleaseSustain',
 		'holdSustain': 'HoldSustain',
 		'colorful': 'Colorful',
+		'lookingForMidi': 'Looking for an input MIDI device…',
+		'midiInput': 'MidiInput',
 	}
 }

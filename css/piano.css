@@ -13,8 +13,20 @@
     background: #e28e94;
 }
 
+.nav {
+    display: flex;
+    height: 60px;
+    background: linear-gradient(60deg, #ffffff, #eaf8e4);
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.logo {
+    height: 50px;
+    margin: 5px 20px 5px 20px;
+}
+
 .settings {
-    background: linear-gradient(60deg, #b2c7db, #717dca);
+    margin: 10px 20px 10px auto;
 }
 
 .credits {
@@ -93,15 +105,15 @@ body {
 }
 
 #sustainCircle {
-    width:10px;
-    height:10px;
-    border:2px solid #000;
-    border-radius:50%;
+    width: 10px;
+    height: 10px;
+    border: 2px solid #000;
+    border-radius: 50%;
 }
 
 #sustainText {
-    width:auto;
-    height:14px;
+    width: auto;
+    height: 14px;
     margin-left: 5px;
     font-size: 12px;
     line-height: 14px;

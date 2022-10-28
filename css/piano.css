@@ -110,13 +110,13 @@ body {
 /* Tuts */
 ul#piano {
     display: inline-block;
-    height: 190px;
+    height: calc(100vw * 240 / 2560);
     overflow: auto;
 }
 
 ul#pianoNote {
     display: inline-block;
-    height: 20px;
+    height: calc(100vw * 20 / 2560);
 }
 
 ul#piano li {
@@ -137,7 +137,7 @@ ul#pianoNote li {
 
 ul#piano li a, ul#piano li div.anchor {
     display: block;
-    height: 170px;
+    height: calc(100vw * 220 / 2560);
     background: #fff;
     background: -webkit-linear-gradient(-30deg, #f5f5f5, #fff);
     background: -moz-linear-gradient(-30deg, #f5f5f5, #fff);
@@ -159,14 +159,14 @@ ul#piano li a:active, ul#piano li div.anchor:active {
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
     position: relative;
     top: 2px;
-    height: 180px;
+    height: calc(100vw * 216 / 2560);
 }
 
 ul#piano li a:active:before, ul#piano li div.anchor:active:before {
     content: "";
     width: 0px;
     height: 0px;
-    border-width: 180px 5px 0px;
+    border-width: calc(100vw * 216 / 2560) calc(100vw * 5 / 2560) 0px;
     border-style: solid;
     border-color: transparent transparent transparent rgba(0, 0, 0, 0.1);
     position: absolute;
@@ -178,7 +178,7 @@ ul#piano li a:active:after, ul#piano li div.anchor:active:after {
     content: "";
     width: 0px;
     height: 0px;
-    border-width: 180px 5px 0px;
+    border-width: calc(100vw * 216 / 2560) calc(100vw * 5 / 2560) 0px;
     border-style: solid;
     border-color: transparent rgba(0, 0, 0, 0.1) transparent transparent;
     position: absolute;
@@ -190,7 +190,7 @@ ul#piano li a:active:after, ul#piano li div.anchor:active:after {
 ul#piano li span {
     position: absolute;
     top: 0px;
-    height: 110px;
+    height: calc(100vw * 140 / 2560);
     background: #333;
     background: -webkit-linear-gradient(-20deg, #333, #000, #333);
     background: -moz-linear-gradient(-20deg, #333, #000, #333);
@@ -218,14 +218,14 @@ ul#pianoNote li span {
 
 ul#piano li span:active {
     border-bottom-width: 2px;
-    height: 123px;
+    height: calc(100vw * 143 / 2560);
     -webkit-box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4), 0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4), 0 -1px 0px #000;
     -moz-box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4), 0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4), 0 -1px 0px #000;
     box-shadow: inset 0px -1px 1px rgba(255, 255, 255, 0.4), 0 1px 0px rgba(0, 0, 0, 0.8), 0 2px 2px rgba(0, 0, 0, 0.4), 0 -1px 0px #000;
 }
 
 ul#piano li li {
-    width: 150px;
+    width: calc(100vw * 170 / 2560);
     height: auto;
     display: block;
     float: none;
@@ -235,7 +235,7 @@ ul#piano li li {
 ul#piano li li a, ul#piano li li a:active {
     height: auto;
     display: block;
-    padding: 10px 15px;
+    padding: calc(100vw * 10 / 2560) calc(100vw * 15 / 2560);
     background: #333;
     font: normal 12px Arial, Sans-Serif;
     color: #fff;
@@ -260,7 +260,7 @@ ul#piano li li a:active:before, ul#piano li li a:active:after {
 ul#piano li:hover ul, ul#piano li:hover #search, ul#piano li:hover #contact {
     visibility: visible;
     opacity: 1;
-    margin-top: 15px;
+    margin-top: calc(100vw * 15 / 2560);
 }
 
 ul#piano li li a:hover {

@@ -27,7 +27,7 @@
 
     <div class="nav">
         <img class="logo" src="img/logo.png" />
-        <i-button class="settings" shape="circle" icon="md-settings" size="large" @click="modalSetting = true"></i-button>
+        <i-button class="settings" type="text" shape="circle" icon="md-settings" size="large" @click="modalSetting = true"></i-button>
     </div>
     <Modal v-model="modalSetting" draggable sticky scrollable :mask="false" :title="$t('settings')" :footer-hide="true">
         <i-tabs type="card">

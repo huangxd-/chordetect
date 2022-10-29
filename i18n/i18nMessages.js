@@ -17,6 +17,7 @@ const i18nMessages = {
 		'colorful': '彩色',
 		'lookingForMidi': '正在查找MIDI输入设备…',
 		'midiInput': 'MIDI输入',
+		'sustain': '踏板',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -35,5 +36,6 @@ const i18nMessages = {
 		'colorful': 'Colorful',
 		'lookingForMidi': 'Looking for an input MIDI device…',
 		'midiInput': 'MidiInput',
+		'sustain': 'Sustain',
 	}
 }

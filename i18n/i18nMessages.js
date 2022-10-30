@@ -20,6 +20,7 @@ const i18nMessages = {
 		'sustain': '踏板',
 		'volume': '音量',
 		'mute': '静音',
+		'metronome': '节拍器',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -40,5 +41,6 @@ const i18nMessages = {
 		'midiInput': 'MidiInput',
 		'sustain': 'Sustain',
 		'mute': 'Mute',
+		'metronome': 'Metronome',
 	}
 }

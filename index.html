@@ -80,6 +80,14 @@
                 <br>
             </i-tab-pane>
             <i-tab-pane :label="$t('audio')" name="tab3">
+                <span>{{ $t('metronome') }}</span>:
+                <i-switch class="iSwitch" v-model="switchMetronomePanel" @on-change="changeSwitchMetronomePanel">
+                    <Icon type="md-checkmark" slot="open"></Icon>
+                    <Icon type="md-close" slot="close"></Icon>
+                </i-switch>
+                <br>
+                <p>音源</p>
+                <br>
                 <Row class="iSliderRow">
                     <i-col span="3">
                         <span>{{ $t('volume') }}</span>:
@@ -91,9 +99,6 @@
                         <Checkbox class="iCheckbox" v-model="muteCheckbox" border>{{ $t('mute') }}</Checkbox>
                     </i-col>
                 </Row>
-                <br>
-                <p>音源</p>
-                <p>节拍器</p>
             </i-tab-pane>
             <i-tab-pane :label="$t('other')" name="tab4">
                 <p>帮助文档</p>
@@ -106,6 +111,9 @@
 
     </Modal>
     <Modal v-model="modalGuitarPanel" draggable sticky scrollable :mask="false" :title="$t('guitarPanel')" :footer-hide="true" @on-visible-change="changeModalGuitarPanel">
+
+    </Modal>
+    <Modal v-model="modalMetronomePanel" draggable sticky scrollable :mask="false" :title="$t('metronome')" :footer-hide="true" @on-visible-change="changeModalMetronomePanel">
 
     </Modal>
 

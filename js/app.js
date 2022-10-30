@@ -131,6 +131,8 @@ var app = new Vue({
         colorfulCheckbox: false,
         volumeSlider: 50,
         muteCheckbox: false,
+        switchMetronomePanel: false,
+        modalMetronomePanel: false,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -274,6 +276,12 @@ var app = new Vue({
         },
         changeModalGuitarPanel(status) {
             this.switchGuitarPanel = status
+        },
+        changeSwitchMetronomePanel(status) {
+            this.modalMetronomePanel = status
+        },
+        changeModalMetronomePanel(status) {
+            this.switchMetronomePanel = status
         },
         initKeyboard() {
             var keys = [];

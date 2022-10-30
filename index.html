@@ -66,7 +66,7 @@
                         <span>{{ $t('staffScale') }}</span>:
                     </i-col>
                     <i-col span="17">
-                        <Slider class="iSlider" v-model="scorePanelScale" :step="0.1" :min="0.7" :max="2.5" @on-change="scorePanelScaleChange()"></Slider>
+                        <Slider class="iSlider" v-model="scorePanelScale" :step="0.1" :min="0.7" :max="2.5" @on-input="scorePanelScaleChange()"></Slider>
                     </i-col>
                 </Row>
                 <br>
@@ -80,7 +80,18 @@
                 <br>
             </i-tab-pane>
             <i-tab-pane :label="$t('audio')" name="tab3">
-                <p>音量大小设置/禁音</p>
+                <Row class="iSliderRow">
+                    <i-col span="3">
+                        <span>{{ $t('volume') }}</span>:
+                    </i-col>
+                    <i-col span="14">
+                        <Slider class="iSlider" v-model="volumeSlider" :step="1" :min="0" :max="100"></Slider>
+                    </i-col>
+                    <i-col span="6">
+                        <Checkbox class="iCheckbox" v-model="muteCheckbox" border>{{ $t('mute') }}</Checkbox>
+                    </i-col>
+                </Row>
+                <br>
                 <p>音源</p>
                 <p>节拍器</p>
             </i-tab-pane>

@@ -18,6 +18,8 @@ const i18nMessages = {
 		'lookingForMidi': '正在查找MIDI输入设备…',
 		'midiInput': 'MIDI输入',
 		'sustain': '踏板',
+		'volume': '音量',
+		'mute': '静音',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -37,5 +39,6 @@ const i18nMessages = {
 		'lookingForMidi': 'Looking for an input MIDI device…',
 		'midiInput': 'MidiInput',
 		'sustain': 'Sustain',
+		'mute': 'Mute',
 	}
 }

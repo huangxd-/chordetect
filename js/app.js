@@ -129,6 +129,8 @@ var app = new Vue({
         keyColorReleaseSustain: 'hsl(150, 100%, 50%)',
         keyColorHoldSustain: 'hsl(200, 100%, 50%)',
         colorfulCheckbox: false,
+        volumeSlider: 50,
+        muteCheckbox: false,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -172,7 +174,7 @@ var app = new Vue({
                         this.refreshScore()
                     }
 
-                    MIDI.setVolume(0, 127);
+                    MIDI.setVolume(0, this.muteCheckbox ? 0 : this.volumeSlider * 3);
                     MIDI.noteOn(0, event.note.number, event.velocity * 127, 0);
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {

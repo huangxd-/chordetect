@@ -72,6 +72,11 @@ body {
     margin-right: 10px;
 }
 
+.iSliderRow .iCheckbox {
+    margin-top: -7px;
+    margin-left: 20px;
+}
+
 #scoreWrap {
     display: flex;
     justify-content: center;

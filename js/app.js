@@ -113,11 +113,11 @@ var app = new Vue({
         languageList: [
             {
                 value: 'zh_CN',
-                label: i18n.t("chinese")
+                label: i18n.t('chinese')
             },
             {
                 value: 'en_US',
-                label: i18n.t("english")
+                label: i18n.t('english')
             },
         ],
         modelLanguage: 'zh_CN',
@@ -133,6 +133,145 @@ var app = new Vue({
         muteCheckbox: false,
         switchMetronomePanel: false,
         modalMetronomePanel: false,
+        modelSoundLibrary: 'acoustic_grand_piano',
+        soundLibraryList: [
+            {
+                value: 'acoustic_grand_piano',
+                label: i18n.t('acoustic_grand_piano')
+            },
+            {
+                value: 'bright_acoustic_piano',
+                label: i18n.t('bright_acoustic_piano')
+            },
+            {
+                value: 'electric_grand_piano',
+                label: i18n.t('electric_grand_piano')
+            },
+            {
+                value: 'honkytonk_piano',
+                label: i18n.t('honkytonk_piano')
+            },
+            {
+                value: 'electric_piano_1',
+                label: i18n.t('electric_piano_1')
+            },
+            {
+                value: 'electric_piano_2',
+                label: i18n.t('electric_piano_2')
+            },
+            {
+                value: 'glockenspiel',
+                label: i18n.t('glockenspiel')
+            },
+            {
+                value: 'music_box',
+                label: i18n.t('music_box')
+            },
+            {
+                value: 'tubular_bells',
+                label: i18n.t('tubular_bells')
+            },
+            {
+                value: 'dulcimer',
+                label: i18n.t('dulcimer')
+            },
+            {
+                value: 'accordion',
+                label: i18n.t('accordion')
+            },
+            {
+                value: 'harmonica',
+                label: i18n.t('harmonica')
+            },
+            {
+                value: 'acoustic_guitar_nylon',
+                label: i18n.t('acoustic_guitar_nylon')
+            },
+            {
+                value: 'acoustic_guitar_steel',
+                label: i18n.t('acoustic_guitar_steel')
+            },
+            {
+                value: 'electric_guitar_clean',
+                label: i18n.t('electric_guitar_clean')
+            },
+            {
+                value: 'acoustic_bass',
+                label: i18n.t('acoustic_bass')
+            },
+            {
+                value: 'violin',
+                label: i18n.t('violin')
+            },
+            {
+                value: 'viola',
+                label: i18n.t('viola')
+            },
+            {
+                value: 'cello',
+                label: i18n.t('cello')
+            },
+            {
+                value: 'contrabass',
+                label: i18n.t('contrabass')
+            },
+            {
+                value: 'choir_aahs',
+                label: i18n.t('choir_aahs')
+            },
+            {
+                value: 'voice_oohs',
+                label: i18n.t('voice_oohs')
+            },
+            {
+                value: 'synth_choir',
+                label: i18n.t('synth_choir')
+            },
+            {
+                value: 'orchestra_hit',
+                label: i18n.t('orchestra_hit')
+            },
+            {
+                value: 'trumpet',
+                label: i18n.t('trumpet')
+            },
+            {
+                value: 'trombone',
+                label: i18n.t('trombone')
+            },
+            {
+                value: 'tuba',
+                label: i18n.t('tuba')
+            },
+            {
+                value: 'baritone_sax',
+                label: i18n.t('baritone_sax')
+            },
+            {
+                value: 'flute',
+                label: i18n.t('flute')
+            },
+            {
+                value: 'blown_bottle',
+                label: i18n.t('blown_bottle')
+            },
+            {
+                value: 'whistle',
+                label: i18n.t('whistle')
+            },
+            {
+                value: 'kalimba',
+                label: i18n.t('kalimba')
+            },
+            {
+                value: 'steel_drums',
+                label: i18n.t('steel_drums')
+            },
+            {
+                value: 'synth_drum',
+                label: i18n.t('synth_drum')
+            },
+        ],
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -283,6 +422,11 @@ var app = new Vue({
         changeModalMetronomePanel(status) {
             this.switchMetronomePanel = status
         },
+        soundLibraryChange(event) {
+            console.log(event)
+            console.log(this.modelSoundLibrary)
+            this.initMidi()
+        },
         initKeyboard() {
             var keys = [];
             for (var i = 0; i < this.nbKeys; ++i) {
@@ -325,7 +469,7 @@ var app = new Vue({
         },
 
         initMidi() {
-            const inst = this.instrument
+            const inst = this.modelSoundLibrary
             MIDI.loadPlugin({
                 api: "webaudio",
                 soundfontUrl: "../soundfont/",

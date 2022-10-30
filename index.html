@@ -77,7 +77,6 @@
                 <i-select class="iSelect" v-model="selectedMidiInputId" style="width: auto">
                     <i-option v-for="input in WebMidi.inputs" :value="input.id" :key="input.id">{{ input.name }}</i-option>
                 </i-select>
-                <br>
             </i-tab-pane>
             <i-tab-pane :label="$t('audio')" name="tab3">
                 <span>{{ $t('metronome') }}</span>:
@@ -86,7 +85,10 @@
                     <Icon type="md-close" slot="close"></Icon>
                 </i-switch>
                 <br>
-                <p>音源</p>
+                <span>{{ $t('soundLibrary') }}</span>:
+                <i-select class="iSelect" v-model="modelSoundLibrary" style="width: auto" @on-change="soundLibraryChange($event)">
+                    <i-option v-for="item in soundLibraryList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                </i-select>
                 <br>
                 <Row class="iSliderRow">
                     <i-col span="3">

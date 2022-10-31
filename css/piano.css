@@ -109,8 +109,8 @@ body {
 
 #sustainPanel {
     display: flex;
-    justify-content: right;
-    margin-right: 80px;
+    /*justify-content: right;*/
+    /*margin-right: 80px;*/
 }
 
 #sustainCircle {

@@ -423,9 +423,10 @@ var app = new Vue({
             this.switchMetronomePanel = status
         },
         soundLibraryChange(event) {
-            console.log(event)
-            console.log(this.modelSoundLibrary)
             this.initMidi()
+        },
+        muteCheckboxChange() {
+            MIDI.noteOn(0, 1, 1, 0);
         },
         initKeyboard() {
             var keys = [];

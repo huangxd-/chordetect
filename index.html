@@ -100,7 +100,7 @@
                         <Slider class="iSlider" v-model="volumeSlider" :step="1" :min="0" :max="100"></Slider>
                     </i-col>
                     <i-col span="6">
-                        <Checkbox class="iCheckbox" v-model="muteCheckbox" border>{{ $t('mute') }}</Checkbox>
+                        <Checkbox class="iCheckbox" v-model="muteCheckbox" border @on-change="muteCheckboxChange()">{{ $t('mute') }}</Checkbox>
                     </i-col>
                 </Row>
             </i-tab-pane>

@@ -286,7 +286,11 @@ var app = new Vue({
             }
 
             if (WebMidi.inputs.length) {
-                this.selectedMidiInputId = WebMidi.inputs[0].id;
+                if (WebMidi.inputs.length > 1 && WebMidi.inputs[0].name === "Session 1") {
+                    this.selectedMidiInputId = WebMidi.inputs[1].id;
+                } else {
+                    this.selectedMidiInputId = WebMidi.inputs[0].id;
+                }
             }
         });
 

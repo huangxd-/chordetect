@@ -272,6 +272,7 @@ var app = new Vue({
                 label: i18n.t('synth_drum')
             },
         ],
+        chordNames: [],
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -321,6 +322,8 @@ var app = new Vue({
 
                     MIDI.setVolume(0, this.muteCheckbox ? 0 : this.volumeSlider * 3);
                     MIDI.noteOn(0, event.note.number, event.velocity * 127, 0);
+
+                    this.genChords()
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {
                     var note = event.note.number - this.offsetKeys + this.transpose;
@@ -332,6 +335,8 @@ var app = new Vue({
                         this.keys[note].pushed = false;
 
                         this.refreshScore()
+
+                        this.genChords()
                     }
                 });
                 this.midiInput.addListener('controlchange', 'all', (event) => {
@@ -352,6 +357,7 @@ var app = new Vue({
 
                     this.refreshScore()
 
+                    this.genChords()
                 });
             }
         },
@@ -700,5 +706,16 @@ var app = new Vue({
             }
             return keyFretMidiCode.slice(9, 97)
         },
+
+        genChords() {
+            var tones = []
+            for (let i = 0; i < 89; ++i) {
+                if (this.keys[i] && this.keys[i].velocity !== 0) {
+                    // chordlibs 'C' is mod 12 = 0
+                    tones.push(i+9)
+                }
+            }
+            this.chordNames = chordlibs.name(tones)
+        }
     }
 });

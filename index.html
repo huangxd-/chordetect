@@ -24,6 +24,7 @@
     <script src="js/iview.min.js"></script>
     <script src="i18n/i18nMessages.js"></script>
     <script src="js/vue-i18n.min.js"></script>
+    <script src="js/chordlibs.js"></script>
 </head>
 <body>
 
@@ -133,8 +134,16 @@
     <div id="scoreWrap" :style="{margin: scoreMarginLeft}">
         <div id="scorePanel"></div>
         <div id="chordPanel" :style="{width: chordPanelWidth, height: chordPanelHeight}">
-            <span id="preferChord" :style="{'font-size': preferChordFontSize}">G7sus4</span>
-            <span id="secondaryChord" :style="{'font-size': secondaryChordFontSize}">Cmaj7</span>
+            <span v-if="chordNames&&chordNames.length>0" class="preferChord" :style="{'font-size': preferChordFontSize}">{{ chordNames[0].name }}</span>
+            <span v-else class="preferChord" :style="{'font-size': preferChordFontSize}">&nbsp;</span>
+            <span v-if="chordNames&&chordNames.length>1" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[1].name }}</span>
+            <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
+            <span v-if="chordNames&&chordNames.length>2" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[2].name }}</span>
+            <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
+            <span v-if="chordNames&&chordNames.length>3" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[3].name }}</span>
+            <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
+            <span v-if="chordNames&&chordNames.length>4" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[4].name }}</span>
+            <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
         </div>
     </div>
     <div id="p-wrapper">

@@ -90,12 +90,11 @@ body {
     flex-direction: column;
 }
 
-#preferChord {
+.preferChord {
     font-size: 40px;
 }
 
-#secondaryChord {
-    margin-top: 10px;
+.secondaryChord {
     font-size: 20px;
     color: #666666;
 }

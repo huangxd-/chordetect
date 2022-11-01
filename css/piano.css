@@ -16,13 +16,14 @@
 .nav {
     display: flex;
     height: 60px;
-    background: linear-gradient(60deg, #ffffff, #eaf8e4);
+    background: linear-gradient(60deg, #ffffff, #f5f5f5);
     border-bottom: 1px solid #dcdcdc;
+    box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.2);
 }
 
 .logo {
-    height: 50px;
-    margin: 5px 20px 5px 20px;
+    height: 40px;
+    margin: 10px 20px 10px 20px;
 }
 
 .settings {

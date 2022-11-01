@@ -91,11 +91,12 @@ body {
 }
 
 .preferChord {
-    font-size: 40px;
+    margin-top: -5px;
+    color: #000011;
 }
 
 .secondaryChord {
-    font-size: 20px;
+    margin-top: 1px;
     color: #666666;
 }
 

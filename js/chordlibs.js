@@ -148,7 +148,7 @@ chordlibs.name = function(tones, is_sharp)
             // オンコード
             if (root != originroot) {
                 // fullname += " (on " + tonename(originroot) + ")";
-                fullname += "/" + tonename(originroot)
+                fullname += " / " + tonename(originroot)
                 complex++;
             }
 
@@ -160,7 +160,7 @@ chordlibs.name = function(tones, is_sharp)
         var tset = new Set()
         var ret = []
         tmp.forEach((element) => {
-            var chordPre = element.name.split('/')[0]
+            var chordPre = element.name.split(' / ')[0]
             if (!tset.has(chordPre)) {
                 tset.add(chordPre)
                 ret.push(element)

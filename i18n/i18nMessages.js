@@ -1,7 +1,7 @@
 const i18nMessages = {
 	'zh_CN': {
 		'settings': '设置',
-		'language': '语言/language',
+		'language': '语言/Language',
 		'chinese': '中文/Chinese',
 		'english': '英文/English',
 		'display': '显示',
@@ -56,10 +56,14 @@ const i18nMessages = {
 		'kalimba': '拇指琴',
 		'steel_drums': '钢鼓',
 		'synth_drum': '合成鼓',
+		'accidental': '和弦升降号',
+		'followKeySignature': '跟随调号',
+		'sharp': '升号',
+		'flat': '降号',
 	},
 	'en_US': {
 		'settings': 'Settings',
-		'language': '语言/language',
+		'language': '语言/Language',
 		'chinese': '中文/Chinese',
 		'display': 'Display',
 		'audio': 'Audio',
@@ -112,5 +116,9 @@ const i18nMessages = {
 		'kalimba': 'kalimba',
 		'steel_drums': 'steel_drums',
 		'synth_drum': 'synth_drum',
+		'accidental': 'ChordAccidental',
+		'followKeySignature': 'FollowKeySignature',
+		'sharp': 'Sharp',
+		'flat': 'Flat',
 	}
 }

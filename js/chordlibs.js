@@ -1,21 +1,35 @@
 const chordlibs = {};
 
-// コード名を返す
-chordlibs.name = function(tones, is_sharp)
+// return chord name
+chordlibs.name = function(tones, keyOffset, is_sharp)
 {
     let complex = 0; //複雑さ
 
-    //音名
+    // tone name
     const tonename = function(tone)
     {
         tone %= 12;
-        if (is_sharp)
+        if (is_sharp === null)
+            return ["C","C#","D","Eb","E","F","F#","G","Ab","A","Bb","B"][tone];
+        else if (is_sharp === '#')
             return ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"][tone];
-        else
+        else if (is_sharp === 'b')
             return ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"][tone];
     };
 
-    //音程配列 bool[12]
+    // roma tone name
+    const tonenameRoma = function(tone)
+    {
+        tone = (tone - keyOffset + 12) % 12;
+        if (is_sharp === null)
+            return ["I","I#","II","IIIb","III","IV","IV#","V","VIb","VI","VIIb","VII"][tone];
+        else if (is_sharp === '#')
+            return ["I","I#","II","II#","III","IV","IV#","V","V#","VI","VI#","VII"][tone];
+        else if (is_sharp === 'b')
+            return ["I","IIb","II","IIIb","III","IV","Vb","V","VIb","VI","VIIb","VII"][tone];
+    };
+
+    // pitch interval arrangement  bool[12]
     const relatives = function(root, tones)
     {
         return tones.reduce((ret, v) => {
@@ -24,12 +38,12 @@ chordlibs.name = function(tones, is_sharp)
         }, []);
     };
 
-    //3度と5度を取り出す(なんかエレガントな書き方ないか...?)
+    // take out the 3rd and 5th (is there an elegant way to write it?...?)
     const factorize = function(incl)
     {
         let triad = {};
 
-        //m7とM7が同時に鳴っている和音はコード化できない
+        // Chords with m7 and m7 sounding at the same time cannot be chord
         if (incl[10] && incl[11]) return {};
 
         if (incl[4]) {        // ------------ M3 based
@@ -38,7 +52,7 @@ chordlibs.name = function(tones, is_sharp)
                 triad.fifth = 7;
             } else if(incl[8]) {  // M3 + aug5
                 triad.fifth = 8;
-            } else if(incl[6]) {  // M3 + dim5 (複雑)
+            } else if(incl[6]) {  // M3 + dim5 (complicated)
                 triad.fifth = 6;
                 complex += 3;
             } else {
@@ -51,7 +65,7 @@ chordlibs.name = function(tones, is_sharp)
                 triad.fifth = 7;
             } else if(incl[6]) {  // m3 + dim5
                 triad.fifth = 6;
-            } else if(incl[8]) {  // m3 + aug5 (複雑)
+            } else if(incl[8]) {  // m3 + aug5 (complicated)
                 triad.fifth = 8;
                 complex += 3;
             } else {
@@ -76,7 +90,7 @@ chordlibs.name = function(tones, is_sharp)
         return triad;
     };
 
-    //三和音と残りの構成音をコード名にする
+    // Chord Names Triads and Remaining Tones
     const assemblechord = function(triad, incl)
     {
         let tension = [];
@@ -98,7 +112,7 @@ chordlibs.name = function(tones, is_sharp)
         if (incl[6]) tension.push("+11");
         if (incl[8]) tension.push("-13");
 
-        // 6th or 13th(7th,±5thがある場合のみ)
+        // 6th or 13th(7th,±5th only if there is)
         if (incl[9]) {
             if (str_7th || str_5th)
                 tension.push("13");
@@ -106,7 +120,7 @@ chordlibs.name = function(tones, is_sharp)
                 str_7th = "6";
         }
         
-        // 慣用句 m-5(13) -> dim7
+        // common usage m-5(13) -> dim7
         if ((triad.third == 3) && (triad.fifth == 6) && incl[9] && !str_7th){
             str_triad = "dim";
             str_7th = "7";
@@ -114,7 +128,7 @@ chordlibs.name = function(tones, is_sharp)
             tension.pop();
         }
 
-        // テンションが2個以上あるときは複雑
+        // Complicated when there are two or more tensions
         if (2 <= tension.length) complex += tension.length - 1;
         
         return str_triad
@@ -124,35 +138,37 @@ chordlibs.name = function(tones, is_sharp)
             + (triad.opt ? triad.opt: "");
     };
 
-    //tones[] からコード名をつける
+    // get a chord name from tones[]
     return function(tones)
     {
         const originroot = tones[0];
 
-        //重複音の除去
+        // Remove duplicate tones
         tones = tones.filter((tone, i, self) => self.indexOf(tone) == i);
 
         var tmp = tones.map(root => {
             complex = 0;
 
-            // ルートからの音程クラス配列を得る
+            // get the interval class array from the root
             let includings = relatives(root, tones);
 
-            // 3度と5度を取り出す
+            // Take out the 3rd and 5th
             let triad = factorize(includings);
             if (!triad.third && !triad.fifth) return;
 
-            // 命名する
+            // chord name
             let fullname = tonename(root) + " " + assemblechord(triad, includings);
+            let romaname = tonenameRoma(root);
 
-            // オンコード
+            // on
             if (root != originroot) {
                 // fullname += " (on " + tonename(originroot) + ")";
                 fullname += " / " + tonename(originroot)
+                romaname += " / " + tonenameRoma(originroot)
                 complex++;
             }
 
-            return {name:fullname, comp:complex};
+            return {name:fullname, comp:complex, romaName:romaname};
 
         }).filter(a => a).sort((a, b) => (a.comp - b.comp));
 
@@ -167,12 +183,11 @@ chordlibs.name = function(tones, is_sharp)
             }
         });
 
-        //転回形を考える
         return ret
     }(tones);
 };
 
-//コード名から構成音を返す
+// Return constituent notes from chord names
 chordlibs.struct = function(chordname)
 {
     let str = chordname;
@@ -204,7 +219,7 @@ chordlibs.struct = function(chordname)
         if (triad == "maj" && seventh === "7") seventh = "maj7";
     }
 
-    // addつきテンション
+    // add tension
     let tension1 = str.match(/add[0-9,#b+-]+/g) || [];
     tension1.forEach(t => (str = str.split(t).join("")));
     tension1 = tension1.map(t => t.slice(3).split("").map(c => {
@@ -213,7 +228,7 @@ chordlibs.struct = function(chordname)
         return c + ",";
     }).join(""));
 
-    // 括弧付きテンション
+    // bracketed tension
     let tension2 = str.match(/\([0-9,#b+-]+\)/g) || [];
     tension2.forEach(t => (str = str.split(t).join("")));
     tension2 = tension2.map(t => t.slice(1, -1).split("").map(c => {
@@ -222,11 +237,11 @@ chordlibs.struct = function(chordname)
         return c + ",";
     }).join(""));
 
-    // その他表現
+    // Other expressions
     let tension3 = str.match(/(aug|sus[24]|[#b+-]5|[#b+-]?9|[#+]?11|[b-]?13|omit[35])/gi) || [];
     tension3.forEach(t => (str = str.split(t).join("")));
 
-    // 7th省略表記
+    // 7th abbreviations
     if (!seventh && tension3.some(t => t.match(/(9|11|13)$/))) {
         seventh = (triad == "maj") ? "maj7" : "7";
     }
@@ -246,7 +261,7 @@ chordlibs.struct = function(chordname)
     return struct;
 };
 
-//要素に切ったものをtones化する
+// Make tones by cutting into elements
 const name2tones = function(triad, seventh, tensions)
 {
     const pat = {
@@ -262,7 +277,7 @@ const name2tones = function(triad, seventh, tensions)
     if (seventh == "maj7") {
         ret.push(interval2semitone("7"));
     }
-    //["maj","7"]は"maj7"扱い, ["dim","7"]は"dim7"扱い, ["","7"]は"min7"扱い
+    // ["maj","7"] is treated as "maj7", ["dim","7"] is treated as "dim7", ["","7"] is treated as "min7"
     if (seventh == "7") {
         let c = interval2semitone("7");
         if (triad == "maj") ret.push(c);
@@ -278,11 +293,11 @@ const name2tones = function(triad, seventh, tensions)
         if (val.indexOf("omit3") == 0) ret[0] = -1;
         if (val.indexOf("omit5") == 0) ret[1] = -1;
 
-        //テンション
+        // tension
         const interval = interval2semitone(val);
         if (interval < 0) return;
 
-        //5度を書き換え
+        // rewrite the fifth
         if (val.slice(-1) == "5") {
             ret[1] = interval;
         } else {
@@ -293,7 +308,7 @@ const name2tones = function(triad, seventh, tensions)
     return ret.filter(v => v != -1);
 };
 
-//音名(C-B)からピッチクラス(0-11)を返す
+// Return pitch class (0-11) from note name (C-B)
 const pitchclass = (tonename) => {
     let ret = ("C D EF G A B").indexOf(tonename.charAt(0));
     if (tonename.charAt(1) == "#") ret++;
@@ -301,7 +316,7 @@ const pitchclass = (tonename) => {
     return (ret + 12) % 12;
 };
 
-//音程[度]から音程クラスを返す
+// returns an interval class from an interval [degree]
 const interval2semitone = (str) =>
 {
     const val = str.split("add").join("")
@@ -324,17 +339,17 @@ chordlibs.interval2semitone = interval2semitone;
 
 /*
 <struct: algorithm>
-(1)ルートを取り除く
-(2)トライアド部を取り除く
+(1)get root
+(2)get the triad
 M,m,Maj,maj,dim,sus,aug
-(3)テトラッド部を取り出す
+(3)take out the tetrad part
 7,6,M7
-(4)残部
-addX:add[+-]5 はadd[+-]11 扱い
+(4)get the other part
+addX:add[+-]5 is treated as add[+-]11
 omit3,5
-9,11,13,+9,-9,+11,-13,カッコつき有無で意味変わる
--5,+5 カッコつきでも意味同じ
-aug (2)であった場合はエラー
-4,2,カッコつきはエラー
+9,11,13,+9,-9,+11,-13,the meaning changes depending on the presence or absence of parentheses
+-5,+5 same meaning even with parentheses
+aug (2) an error if
+4,2,brackets are errors
 */
 

@@ -49,6 +49,11 @@
                     <i-option v-for="item in keyList" :value="item" :key="item">{{ item }}</i-option>
                 </i-select>
                 <br>
+                <span>{{ $t('accidental') }}</span>:
+                <i-select class="iSelect" v-model="modelAccidental" style="width: auto">
+                    <i-option v-for="item in accidentalList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
+                </i-select>
+                <br>
                 <span>{{ $t('language') }}</span>:
                 <i-select class="iSelect" v-model="modelLanguage" style="width: auto" @on-change="languageChange($event)">
                     <i-option v-for="item in languageList" :value="item.value" :key="item.value">{{ item.label }}</i-option>
@@ -75,7 +80,6 @@
                     </i-col>
                 </Row>
                 <br>
-                <p>和弦升降号设置，默认跟随调式</p>
             </i-tab-pane>
             <i-tab-pane label="MIDI" name="tab2">
                 <span>{{ $t('midiInput') }}</span>:
@@ -134,15 +138,25 @@
     <div id="scoreWrap" :style="{margin: scoreMarginLeft}">
         <div id="scorePanel"></div>
         <div id="chordPanel" :style="{width: chordPanelWidth, height: chordPanelHeight}">
-            <span v-if="chordNames&&chordNames.length>0" class="preferChord" :style="{'font-size': preferChordFontSize}">{{ chordNames[0].name }}</span>
+            <span v-if="chordNames&&chordNames.length>0" class="preferChord" :style="{'font-size': preferChordFontSize}">
+                {{ chordNames[0].name }}<span class="preferChordRoma" :style="{'font-size': preferChordRomaFontSize}">[{{ chordNames[0].romaName }}]</span>
+            </span>
             <span v-else class="preferChord" :style="{'font-size': preferChordFontSize}">&nbsp;</span>
-            <span v-if="chordNames&&chordNames.length>1" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[1].name }}</span>
+            <span v-if="chordNames&&chordNames.length>1" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">
+                {{ chordNames[1].name }}<span class="secondaryChordRoma" :style="{'font-size': secondaryChordRomaFontSize}">[{{ chordNames[1].romaName }}]</span>
+            </span>
             <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
-            <span v-if="chordNames&&chordNames.length>2" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[2].name }}</span>
+            <span v-if="chordNames&&chordNames.length>2" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">
+                {{ chordNames[2].name }}<span class="secondaryChordRoma" :style="{'font-size': secondaryChordRomaFontSize}">[{{ chordNames[2].romaName }}]</span>
+            </span>
             <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
-            <span v-if="chordNames&&chordNames.length>3" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[3].name }}</span>
+            <span v-if="chordNames&&chordNames.length>3" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">
+                {{ chordNames[3].name }}<span class="secondaryChordRoma" :style="{'font-size': secondaryChordRomaFontSize}">[{{ chordNames[3].romaName }}]</span>
+            </span>
             <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
-            <span v-if="chordNames&&chordNames.length>4" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">{{ chordNames[4].name }}</span>
+            <span v-if="chordNames&&chordNames.length>4" class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">
+                {{ chordNames[4].name }}<span class="secondaryChordRoma" :style="{'font-size': secondaryChordRomaFontSize}">[{{ chordNames[4].romaName }}]</span>
+            </span>
             <span v-else class="secondaryChord" :style="{'font-size': secondaryChordFontSize}">&nbsp;</span>
         </div>
     </div>

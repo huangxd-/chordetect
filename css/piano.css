@@ -106,6 +106,14 @@ body {
     font-family: Neucha;
 }
 
+.preferChordRoma {
+    margin-left: 20px;
+}
+
+.secondaryChordRoma {
+    margin-left: 20px;
+}
+
 /* Piano Wrapper */
 #p-wrapper {
     overflow-x: auto;

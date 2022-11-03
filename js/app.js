@@ -38,6 +38,10 @@ var app = new Vue({
             'C': null, 'C#': '#', 'D': '#', 'Eb': 'b', 'E': '#', 'F': 'b', 'F#': '#', 'G': '#',
             'Ab': 'b', 'A': '#', 'Bb': 'b', 'B': '#', 'Db': 'b', 'Gb': 'b', 'Cb': 'b'
         },
+        keyOffsets: {
+            'C': 0, 'C#': 1, 'D': 2, 'Eb': 3, 'E': 4, 'F': 5, 'F#': 6, 'G': 7,
+            'Ab': 8, 'A': 9, 'Bb': 10, 'B': 11, 'Db': 1, 'Gb': 6, 'Cb': 11
+        },
         keyNoteList: {
             'C': [null, null, null, null, null, null, null],
             'C#': ['#', '#', '#', '#', '#', '#', '#'],
@@ -99,7 +103,7 @@ var app = new Vue({
         staveBass: null,
         upVoice: null,
         lowVoice: null,
-        scorePanelScale: 1.3,
+        scorePanelScale: 1.2,
         scorePanelWidth: scorePanelBaseWidthHeight,
         scorePanelHeight: scorePanelBaseWidthHeight,
         noteFixX: 140,
@@ -272,6 +276,21 @@ var app = new Vue({
             },
         ],
         chordNames: [],
+        modelAccidental: 'auto',
+        accidentalList: [
+            {
+                value: 'auto',
+                label: i18n.t('followKeySignature')
+            },
+            {
+                value: 'sharp',
+                label: i18n.t('sharp')
+            },
+            {
+                value: 'flat',
+                label: i18n.t('flat')
+            },
+        ],
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -377,7 +396,7 @@ var app = new Vue({
             return `${((this.pageHeight) - this.scorePanelHeight - 200) / 2}px 0px`;
         },
         chordPanelWidth: function () {
-            return `${this.scorePanelWidth - 100}px`;
+            return `${this.scorePanelWidth}px`;
         },
         chordPanelHeight: function () {
             return `${this.scorePanelHeight}px`;
@@ -394,6 +413,12 @@ var app = new Vue({
         },
         secondaryChordFontSize: function () {
             return `${this.scorePanelScale * 15}px`;
+        },
+        preferChordRomaFontSize: function () {
+            return `${this.scorePanelScale * 20}px`;
+        },
+        secondaryChordRomaFontSize: function () {
+            return `${this.scorePanelScale * 10}px`;
         },
     },
     methods: {
@@ -715,7 +740,15 @@ var app = new Vue({
                     tones.push(i+9)
                 }
             }
-            this.chordNames = chordlibs.name(tones)
+            var is_sharp = null
+            if (this.modelAccidental === "auto") {
+                is_sharp = this.keyScaleList[this.modelKeySignature]
+            } else if (this.modelAccidental === "sharp") {
+                is_sharp = "#"
+            } else if (this.modelAccidental === "flat") {
+                is_sharp = "b"
+            }
+            this.chordNames = chordlibs.name(tones, this.keyOffsets[this.modelKeySignature], is_sharp)
         }
     }
 });

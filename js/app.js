@@ -108,7 +108,6 @@ var app = new Vue({
         keySigLow: null,
         keyTextUp: null,
         keyTextLow: null,
-        instrument: "acoustic_grand_piano",
         modalSetting: false,
         languageList: [
             {
@@ -521,6 +520,7 @@ var app = new Vue({
             this.keySigLow.addToStave(this.staveBass)
 
             this.keyTextUp = new StaveText(`Key: ${this.modelKeySignature}`, StaveModifierPosition.ABOVE, {justification: 0})
+            this.keyTextUp.setFont('Neucha', 16);
             this.staveTreble.addModifier(this.keyTextUp)
 
             const connector = new StaveConnector(this.staveTreble, this.staveBass);

@@ -143,7 +143,7 @@ chordlibs.name = function(tones, is_sharp)
             if (!triad.third && !triad.fifth) return;
 
             // 命名する
-            let fullname = tonename(root) + assemblechord(triad, includings);
+            let fullname = tonename(root) + " " + assemblechord(triad, includings);
 
             // オンコード
             if (root != originroot) {

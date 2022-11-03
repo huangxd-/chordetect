@@ -1,3 +1,7 @@
+@font-face {
+    font-family: Neucha;
+    src:url("fonts/Neucha-Regular.ttf");
+}
 
 * {
     margin: 0px;
@@ -93,11 +97,13 @@ body {
 .preferChord {
     margin-top: -5px;
     color: #000011;
+    font-family: Neucha;
 }
 
 .secondaryChord {
     margin-top: 1px;
     color: #666666;
+    font-family: Neucha;
 }
 
 /* Piano Wrapper */

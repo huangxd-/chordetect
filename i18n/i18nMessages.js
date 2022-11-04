@@ -60,6 +60,11 @@ const i18nMessages = {
 		'followKeySignature': '跟随调号',
 		'sharp': '升号',
 		'flat': '降号',
+		'configure': '配置',
+		'beat': '节奏',
+		'tempo': '速度',
+		'start': '开始',
+		'stop': '停止',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -120,5 +125,10 @@ const i18nMessages = {
 		'followKeySignature': 'FollowKeySignature',
 		'sharp': 'Sharp',
 		'flat': 'Flat',
+		'configure': 'configure',
+		'beat': 'Beat',
+		'tempo': 'Tempo',
+		'start': 'START',
+		'stop': 'STOP',
 	}
 }

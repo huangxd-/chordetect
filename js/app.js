@@ -291,6 +291,14 @@ var app = new Vue({
                 label: i18n.t('flat')
             },
         ],
+        beat: 4,
+        gain: -25,
+        tempo: 100,
+        mute: false,
+        pause: false,
+        playing: false,
+        intf: null,
+        metronomeBtnIcon: "ios-play",
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -461,6 +469,24 @@ var app = new Vue({
         },
         muteCheckboxChange() {
             MIDI.noteOn(0, 1, 1, 0);
+        },
+        start_clickHandler: function () {
+            var metronome = this.$refs.metronome;
+            if (!this.playing) {
+                metronome.start();
+                this.metronomeBtnIcon = "ios-square";
+            } else {
+                metronome.stop();
+                this.metronomeBtnIcon = "ios-play";
+            }
+        },
+        metronome_startHandler: function (intf) {
+            this.playing = true;
+            this.intf = intf;
+        },
+        metronome_stopHandler: function () {
+            this.playing = false;
+            this.intf = null;
         },
         initKeyboard() {
             var keys = [];
@@ -742,7 +768,7 @@ var app = new Vue({
             for (let i = 0; i < 89; ++i) {
                 if (this.keys[i] && this.keys[i].velocity !== 0) {
                     // chordlibs 'C' is mod 12 = 0
-                    tones.push(i+9)
+                    tones.push(i + 9)
                 }
             }
             var is_sharp = null

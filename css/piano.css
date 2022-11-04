@@ -82,6 +82,16 @@ body {
     margin-left: 20px;
 }
 
+#metronomeView {
+    display: block;
+    margin: 0 auto;
+}
+
+#metronomeBtn {
+    display: block;
+    margin: 20px auto;
+}
+
 #scoreWrap {
     display: flex;
     justify-content: center;

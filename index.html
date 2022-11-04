@@ -6,7 +6,7 @@
     <meta name="keywords" content="Chordetect,tool,piano,guitar,chord,stave,detect,recognition,钢琴,和弦,五线谱,识别,工具">
     <meta name="google-site-verification" content="wn8mOuIxFFhFf6ycXQxopDNNA9yJAto_wBtqf_g0Nxc" />
     <meta name="msvalidate.01" content="1827425E98D77F38B09A4893A299A851" />
-    <title>chordetect</title>
+    <title>Chordetect</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -25,6 +25,7 @@
     <script src="i18n/i18nMessages.js"></script>
     <script src="js/vue-i18n.min.js"></script>
     <script src="js/chordlibs.js"></script>
+    <script src="js/vue-metronome.js"></script>
 </head>
 <body>
 
@@ -125,7 +126,48 @@
 
     </Modal>
     <Modal v-model="modalMetronomePanel" draggable sticky scrollable :mask="false" :title="$t('metronome')" :footer-hide="true" @on-visible-change="changeModalMetronomePanel">
+        <metronome-view id="metronomeView" :intf="intf"></metronome-view>
 
+        <metronome ref="metronome"
+          :gain="gain" :tempo="tempo" :beat="beat" :mute="mute" :pause="pause"
+          @start="metronome_startHandler"
+          @stop="metronome_stopHandler"></metronome>
+
+        <Divider>{{ $t('configure') }}</Divider>
+
+        <Row class="iSliderRow">
+            <i-col span="3">
+                <span>{{ $t('beat') }}</span>:
+            </i-col>
+            <i-col span="20">
+                <Slider class="iSlider" v-model="beat" :step="1" :min="0" :max="7" @on-input="$refs.metronome.reset()" show-tip="always" :show-stops="true"></Slider>
+            </i-col>
+        </Row>
+
+        <Row class="iSliderRow">
+            <i-col span="3">
+                <span>{{ $t('volume') }}</span>:
+            </i-col>
+            <i-col span="14">
+                <Slider class="iSlider" v-model="gain" :step="1" :min="-50" :max="0" show-tip="always"></Slider>
+            </i-col>
+            <i-col span="6">
+                <Checkbox class="iCheckbox" v-model="mute" border>{{ $t('mute') }}</Checkbox>
+            </i-col>
+        </Row>
+
+        <Row class="iSliderRow">
+            <i-col span="3">
+                <span>{{ $t('tempo') }}</span>:
+            </i-col>
+            <i-col span="20">
+                <Slider class="iSlider" v-model="tempo" :step="1" :min="0" :max="300" @on-input="$refs.metronome.reset()" show-tip="always" :show-input="true"></Slider>
+            </i-col>
+        </Row>
+
+        <i-button id="metronomeBtn" type="primary" shape="circle" v-bind:icon="metronomeBtnIcon" @click="start_clickHandler">
+            <span>{{ playing? $t('stop') : $t('start') }}</span>
+        </i-button>
     </Modal>
 
     <div v-if="errorMessage" class="error">

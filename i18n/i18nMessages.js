@@ -22,7 +22,7 @@ const i18nMessages = {
 		'mute': '静音',
 		'metronome': '节拍器',
 		'soundLibrary': '音源',
-		'acoustic_grand_piano': '原生三角钢琴',
+		'acoustic_grand_piano': '原声三角钢琴',
 		'bright_acoustic_piano': '明亮钢琴',
 		'electric_grand_piano': '电钢琴',
 		'honkytonk_piano': '酒吧钢琴',

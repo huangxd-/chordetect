@@ -480,6 +480,7 @@ var app = new Vue({
             return (key < 5) == (key % 2);
         },
 
+        // determine key color
         velocityCss(velocity, index, type) {
             if (velocity <= 0) {
                 return {};
@@ -503,6 +504,7 @@ var app = new Vue({
             return str[0].toUpperCase() + str.slice(1);
         },
 
+        // init soundLibrary
         initMidi() {
             const inst = this.modelSoundLibrary
             MIDI.loadPlugin({
@@ -643,6 +645,7 @@ var app = new Vue({
                 voices.push(this.lowVoice)
             }
 
+            // Align treble and bass stave
             var startX = Math.max(staveTreble.getNoteStartX(), staveBass.getNoteStartX());
             staveTreble.setNoteStartX(startX);
             staveBass.setNoteStartX(startX);
@@ -656,8 +659,10 @@ var app = new Vue({
             }
             var fretCount = 0
             if (lowNotes.length !== 0) {
+                // Render first to get position
                 this.lowVoice.draw(context, staveBass);
 
+                // remove first render
                 this.lowVoice.tickables[0].attrs.el.remove()
 
                 lowStaveNote.getModifiers().forEach((element) => {

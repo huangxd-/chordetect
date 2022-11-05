@@ -203,6 +203,7 @@
         </div>
     </div>
     <div id="p-wrapper">
+        <i-button id="resetBtn" type="warning" icon="ios-refresh" size="small" @click="clearKey()" v-show="showResetBtn">reset</i-button>
         <div id="sustainPanel">
             <div id="sustainCircle" :style="{backgroundColor: sustainCircleColor}"></div>
             <span id="sustainText">{{ $t('sustain') }}</span>
@@ -220,10 +221,10 @@
         <ul id="piano">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">
                 <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">
-                    <div class="blackKey" :style="velocityCss(key.velocity, index, 'color')"></div>
+                    <div class="blackKey" :style="velocityCss(key.velocity, index, 'color')" @mousedown="touchKey(index)"></div>
                 </span>
                 <div v-else class="key anchor">
-                    <div class="whiteKey" :style="velocityCss(key.velocity, index, 'color')"></div>
+                    <div class="whiteKey" :style="velocityCss(key.velocity, index, 'color')" @mousedown="touchKey(index)"></div>
                 </div>
             </li>
         </ul>

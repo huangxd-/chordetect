@@ -153,6 +153,10 @@ body {
     line-height: 12px;
 }
 
+#resetBtn {
+    margin-bottom: 16px;
+}
+
 /* Tuts */
 ul#piano {
     display: inline-block;

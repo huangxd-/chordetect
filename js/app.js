@@ -299,6 +299,8 @@ var app = new Vue({
         playing: false,
         intf: null,
         metronomeBtnIcon: "ios-play",
+        keyMode: "MIDI", // [ MIDI / TOUCH ]
+        showResetBtn: false,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -338,6 +340,8 @@ var app = new Vue({
             this.midiInput = WebMidi.getInputById(newMidiInputId);
             if (this.midiInput) {
                 this.midiInput.addListener('noteon', 'all', (event) => {
+                    this.clearKey()
+
                     var note = event.note.number - this.offsetKeys + this.transpose;
                     if (0 <= note && note < this.keys.length) {
                         this.keys[note].velocity = event.velocity;
@@ -352,6 +356,8 @@ var app = new Vue({
                     this.genChords()
                 });
                 this.midiInput.addListener('noteoff', 'all', (event) => {
+                    this.clearKey()
+
                     var note = event.note.number - this.offsetKeys + this.transpose;
                     if (0 <= note && note < this.keys.length) {
                         if (!this.holdPedal) {
@@ -366,6 +372,8 @@ var app = new Vue({
                     }
                 });
                 this.midiInput.addListener('controlchange', 'all', (event) => {
+                    this.clearKey()
+
                     // Hold pedal
                     if (event.controller.number === 64) {
                         if (event.value > 0) {
@@ -780,6 +788,45 @@ var app = new Vue({
                 is_sharp = "b"
             }
             this.chordNames = chordlibs.name(tones, this.keyOffsets[this.modelKeySignature], is_sharp)
-        }
+        },
+
+        clearKey() {
+            if (this.keyMode === "TOUCH") {
+                for (var i = 0; i < this.keys.length; ++i) {
+                    if (this.keyMode === "TOUCH" && this.keys[i].pushed) {
+                        MIDI.noteOff(0, i + 21, 0);
+                        this.keys[i].velocity = 0;
+                        this.keys[i].pushed = false;
+                    }
+                }
+                this.keyMode = "MIDI"
+                this.holdPedal = false
+                this.showResetBtn = false
+            }
+        },
+
+        touchKey(index) {
+            this.keyMode = "TOUCH";
+            this.holdPedal = true;
+            this.showResetBtn = true;
+            var note = index + this.offsetKeys - this.transpose;
+
+            if (!this.keys[index].pushed) {
+                this.keys[index].velocity = 0.7;
+                this.keys[index].pushed = true;
+
+                MIDI.setVolume(0, this.muteCheckbox ? 0 : this.volumeSlider * 3);
+                MIDI.noteOn(0, note, 0.7 * 127, 0);
+            } else {
+                this.keys[index].velocity = 0;
+                this.keys[index].pushed = false;
+
+                MIDI.noteOff(0, note, 0);
+            }
+
+            this.refreshScore()
+
+            this.genChords()
+        },
     }
 });

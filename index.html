@@ -203,7 +203,7 @@
         </div>
     </div>
     <div id="p-wrapper">
-        <i-button id="resetBtn" type="warning" icon="ios-refresh" size="small" @click="clearKey()" v-show="showResetBtn">reset</i-button>
+        <i-button id="resetBtn" type="warning" icon="ios-refresh" size="small" @click="clearKey()" v-show="showResetBtn">{{ $t('reset') }}</i-button>
         <div id="sustainPanel">
             <div id="sustainCircle" :style="{backgroundColor: sustainCircleColor}"></div>
             <span id="sustainText">{{ $t('sustain') }}</span>

@@ -65,6 +65,7 @@ const i18nMessages = {
 		'tempo': '速度',
 		'start': '开始',
 		'stop': '停止',
+		'reset': '复位',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -130,5 +131,6 @@ const i18nMessages = {
 		'tempo': 'Tempo',
 		'start': 'START',
 		'stop': 'STOP',
+		'reset': 'RESET',
 	}
 }

@@ -20,9 +20,9 @@ c2p.hash = (hash) => {
 
 c2p.event = () => {
     app.chordChecks = [... $q("#inchord label[class='chordCheckbox ivu-checkbox-wrapper ivu-checkbox-default ivu-checkbox-border'] input[type=checkbox]")];
+    app.chordOptions = app.chordChecks.map($dom => $dom.parentNode.parentNode.innerText.split("/").shift().trim());
     const listener = $dom => $dom.addEventListener("change", () => {
         app.chordVar = $dom.parentNode.parentNode.innerText.split("/").shift().trim();
-        app.chordOptions = app.chordChecks.map($dom => $dom.parentNode.parentNode.innerText.split("/").shift().trim());
 
         chordChange()
 
@@ -114,6 +114,7 @@ c2p.draw = () => {
         if (!name) return -1;
         let form = {"min":"m", "aug":"+5", "maj7":"M7"}[name] || name;
         let interval = chordlibs.interval2semitone(form);
+        console.log(app.chordOptions)
         return (interval < 0) ? app.chordOptions.indexOf(form) :
             app.chordOptions.map(v => chordlibs.interval2semitone(v))
             .indexOf(interval);

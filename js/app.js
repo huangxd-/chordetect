@@ -547,7 +547,7 @@ var app = new Vue({
             if (struct) {
                 this.clearKey()
                 struct.tones.map(function (item, index) {
-                    if (index < struct.tones.indexOf(struct.root)) {
+                    if (index < struct.tones.indexOf(struct.root) && (item + 2) > struct.root) {
                         app.touchKey(item + 27, false)
                     } else {
                         app.touchKey(item + 39, false)

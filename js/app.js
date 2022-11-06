@@ -3,7 +3,7 @@ const {
     Renderer, Stave, StaveNote, Voice, Formatter, Accidental, StaveConnector, FretHandFinger, Modifier,
     KeySignature, KeyManager, StaveText, StaveModifierPosition
 } = Vex.Flow;
-const {Tabs, TabPane, ColorPicker} = iview
+const {Tabs, TabPane, ColorPicker, CheckboxGroup} = iview
 const scorePanelBaseWidthHeight = 320
 
 var i18n = new VueI18n({
@@ -19,6 +19,7 @@ var app = new Vue({
         'ITabs': Tabs,
         'ITabPane': TabPane,
         'IColorPicker': ColorPicker,
+        'ICheckboxGroup': CheckboxGroup,
     },
     data: {
         nbKeys: 88,
@@ -298,9 +299,42 @@ var app = new Vue({
         pause: false,
         playing: false,
         intf: null,
-        metronomeBtnIcon: "ios-play",
-        keyMode: "MIDI", // [ MIDI / TOUCH ]
+        metronomeBtnIcon: 'ios-play',
+        keyMode: 'MIDI', // [ MIDI / TOUCH ]
         showResetBtn: false,
+        modelRoot: 'C',
+        modelOnRoot: 'C',
+        slashChord: false,
+        chordMin: false,
+        chordDim: false,
+        chordSix: false,
+        chordSeven: false,
+        chordMajSeven: false,
+        chordAug: false,
+        chordMinusFive: false,
+        chordNine: false,
+        chordMinusNine: false,
+        chordAddNine: false,
+        chordEleven: false,
+        chordAddEleven: false,
+        chordThirteen: false,
+        chordMinusThirteen: false,
+        chordSusFour: false,
+        chordOmitThree: false,
+        chordOmitFive: false,
+        chordPropList: ['chordMin', 'chordDim', 'chordSix', 'chordSeven', 'chordMajSeven', 'chordAug',
+            'chordMinusFive', 'chordNine', 'chordMinusNine', 'chordAddNine', 'chordEleven', 'chordAddEleven',
+            'chordThirteen', 'chordMinusThirteen', 'chordSusFour', 'chordOmitThree', 'chordOmitFive'],
+        chordPropMap: {
+            'm': 'chordMin', 'dim': 'chordDim', '6': 'chordSix', '7': 'chordSeven', 'M7': 'chordMajSeven',
+            '+5': 'chordAug', '-5': 'chordMinusFive', '(9)': 'chordNine', '(-9)': 'chordMinusNine',
+            '(+9)': 'chordAddNine', '(11)': 'chordEleven', '(+11)': 'chordAddEleven', '(13)': 'chordThirteen',
+            '(-13)': 'chordMinusThirteen', 'sus4': 'chordSusFour', 'omit3': 'chordOmitThree', 'moit5': 'chordOmitFive'
+        },
+        chordInput: "",
+        chordVar: null,
+        chordOptions: null,
+        chordChecks: null,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale
@@ -495,6 +529,29 @@ var app = new Vue({
         metronome_stopHandler: function () {
             this.playing = false;
             this.intf = null;
+        },
+        rootChange: function () {
+            chordChange()
+        },
+        clearChordInput: function () {
+            clearInput()
+        },
+        drawPianoKeyFromChordInput: function () {
+            let struct = chordlibs.struct(this.chordInput);
+            if (struct) {
+                this.clearKey()
+                let tones = []
+                struct.tones.map(function (item, index) {
+                    if (index < struct.tones.indexOf(0)) {
+                        tones.push(item + 27)
+                        app.touchKey(item + 27, false)
+                    } else {
+                        tones.push(item + 39)
+                        app.touchKey(item + 39, false)
+                    }
+                })
+                console.log(tones)
+            }
         },
         initKeyboard() {
             var keys = [];
@@ -782,10 +839,13 @@ var app = new Vue({
             var is_sharp = null
             if (this.modelAccidental === "auto") {
                 is_sharp = this.keyScaleList[this.modelKeySignature]
+                this.keyNames = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
             } else if (this.modelAccidental === "sharp") {
                 is_sharp = "#"
+                this.keyNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
             } else if (this.modelAccidental === "flat") {
                 is_sharp = "b"
+                this.keyNames = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
             }
             this.chordNames = chordlibs.name(tones, this.keyOffsets[this.modelKeySignature], is_sharp)
         },
@@ -805,7 +865,7 @@ var app = new Vue({
             }
         },
 
-        touchKey(index) {
+        touchKey(index, voice) {
             this.keyMode = "TOUCH";
             this.holdPedal = true;
             this.showResetBtn = true;
@@ -815,8 +875,10 @@ var app = new Vue({
                 this.keys[index].velocity = 0.7;
                 this.keys[index].pushed = true;
 
-                MIDI.setVolume(0, this.muteCheckbox ? 0 : this.volumeSlider * 3);
-                MIDI.noteOn(0, note, 0.7 * 127, 0);
+                if (voice === true) {
+                    MIDI.setVolume(0, this.muteCheckbox ? 0 : this.volumeSlider * 3);
+                    MIDI.noteOn(0, note, 0.7 * 127, 0);
+                }
             } else {
                 this.keys[index].velocity = 0;
                 this.keys[index].pushed = false;

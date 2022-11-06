@@ -25,6 +25,7 @@
     <script src="i18n/i18nMessages.js"></script>
     <script src="js/vue-i18n.min.js"></script>
     <script src="js/chordlibs.js"></script>
+    <script src="js/chord_name.js"></script>
     <script src="js/vue-metronome.js"></script>
 </head>
 <body>
@@ -119,8 +120,47 @@
             </i-tab-pane>
         </i-tabs>
     </Modal>
-    <Modal v-model="modalChordDic" draggable sticky scrollable :mask="false" :title="$t('chordDic')" :footer-hide="true" @on-visible-change="changeModalChordDic">
+    <Modal id="inchord" v-model="modalChordDic" draggable sticky scrollable :mask="false" :title="$t('chordDic')" :footer-hide="true" @on-visible-change="changeModalChordDic">
+        <i-input id="chordname" v-model="chordInput" size="large" :placeholder="$t('pleaseInputChord')" clearable @on-clear="clearChordInput"></i-input>
+        <span id="ignored">{{ $t('incorrectChordMark') }}<span id="ignoredstr"></span></span>
+        <br>
 
+        <Divider></Divider>
+        <span>{{ $t('root') }}</span>:
+        <i-select id="root" class="iSelect" v-model="modelRoot" style="width: auto" @on-change="rootChange">
+            <i-option v-for="item in keyNames" :value="item" :key="item">{{ item }}</i-option>
+        </i-select>
+
+        <span>{{ $t('slashChord') }}</span>:
+        <Checkbox class="slashCheckbox" v-model="slashChord" border @on-change="rootChange">on</Checkbox>
+        <i-select id="onroot" class="iSelect" v-model="modelOnRoot" style="width: auto" @on-change="rootChange">
+            <i-option v-for="item in keyNames" :value="item" :key="item">{{ item }}</i-option>
+        </i-select>
+        <br>
+
+        <Divider>{{ $t('properties') }}</Divider>
+        <Checkbox class="chordCheckbox" v-model="chordMin" border>m</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordDim" border>dim</Checkbox>
+        <Divider :dashed="true" ></Divider>
+        <Checkbox class="chordCheckbox" v-model="chordSix" border>6</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordSeven" border>7</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordMajSeven" border>M7</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordAug" border>+5 / aug</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordMinusFive" border>-5</Checkbox>
+
+        <Divider :dashed="true" ></Divider>
+        <Checkbox class="chordCheckbox" v-model="chordNine" border>(9) / add9</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordMinusNine" border>(-9)</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordAddNine" border>(+9)</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordEleven" border>(11)</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordAddEleven" border>(+11)</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordThirteen" border>(13)</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordMinusThirteen" border>(-13)</Checkbox>
+
+        <Divider :dashed="true" ></Divider>
+        <Checkbox class="chordCheckbox" v-model="chordSusFour" border>sus4</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordOmitThree" border>omit3</Checkbox>
+        <Checkbox class="chordCheckbox" v-model="chordOmitFive" border>omit5</Checkbox>
     </Modal>
     <Modal v-model="modalGuitarPanel" draggable sticky scrollable :mask="false" :title="$t('guitarPanel')" :footer-hide="true" @on-visible-change="changeModalGuitarPanel">
 
@@ -221,10 +261,10 @@
         <ul id="piano">
             <li v-for="(key, index) in keys" :style="{width: liWidth}">
                 <span v-if="isBlackKey(index)" class="key" :style="{width: blackLiWidth, left: blackLiLeft}">
-                    <div class="blackKey" :style="velocityCss(key.velocity, index, 'color')" @mousedown="touchKey(index)"></div>
+                    <div class="blackKey" :style="velocityCss(key.velocity, index, 'color')" @mousedown="touchKey(index, true)"></div>
                 </span>
                 <div v-else class="key anchor">
-                    <div class="whiteKey" :style="velocityCss(key.velocity, index, 'color')" @mousedown="touchKey(index)"></div>
+                    <div class="whiteKey" :style="velocityCss(key.velocity, index, 'color')" @mousedown="touchKey(index, true)"></div>
                 </div>
             </li>
         </ul>

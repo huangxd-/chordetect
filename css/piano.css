@@ -104,6 +104,30 @@ body {
     flex-direction: column;
 }
 
+.slashCheckbox {
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.chordCheckbox {
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+#chordname :nth-last-child(1){
+    color: blue !important;
+    font-weight: bold;
+}
+
+#ignored {
+    display: none;
+    color: red;
+}
+
+#root {
+    margin-right: 40px;
+}
+
 .preferChord {
     margin-top: -5px;
     color: #000011;

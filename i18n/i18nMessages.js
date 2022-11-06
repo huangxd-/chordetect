@@ -66,6 +66,11 @@ const i18nMessages = {
 		'start': '开始',
 		'stop': '停止',
 		'reset': '复位',
+		'root': '根音',
+		'slashChord': '斜杠和弦',
+		'properties': '属性',
+		'pleaseInputChord': '请输入和弦',
+		'incorrectChordMark': '不正确的和弦标记?: ',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -132,5 +137,10 @@ const i18nMessages = {
 		'start': 'START',
 		'stop': 'STOP',
 		'reset': 'RESET',
+		'root': 'Root',
+		'slashChord': 'SlashChord',
+		'properties': 'Properties',
+		'pleaseInputChord': 'please input chord',
+		'incorrectChordMark': 'Incorrect chord mark?: '
 	}
 }

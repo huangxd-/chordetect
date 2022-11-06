@@ -312,6 +312,7 @@ var app = new Vue({
         chordMajSeven: false,
         chordAug: false,
         chordMinusFive: false,
+        chordAddTwo: false,
         chordNine: false,
         chordMinusNine: false,
         chordAddNine: false,
@@ -319,17 +320,20 @@ var app = new Vue({
         chordAddEleven: false,
         chordThirteen: false,
         chordMinusThirteen: false,
+        chordSusTwo: false,
         chordSusFour: false,
         chordOmitThree: false,
         chordOmitFive: false,
         chordPropList: ['chordMin', 'chordDim', 'chordSix', 'chordSeven', 'chordMajSeven', 'chordAug',
-            'chordMinusFive', 'chordNine', 'chordMinusNine', 'chordAddNine', 'chordEleven', 'chordAddEleven',
-            'chordThirteen', 'chordMinusThirteen', 'chordSusFour', 'chordOmitThree', 'chordOmitFive'],
+            'chordMinusFive', 'chordAddTwo', 'chordNine', 'chordMinusNine', 'chordAddNine', 'chordEleven',
+            'chordAddEleven', 'chordThirteen', 'chordMinusThirteen', 'chordSusTwo', 'chordSusFour', 'chordOmitThree',
+            'chordOmitFive'],
         chordPropMap: {
             'm': 'chordMin', 'dim': 'chordDim', '6': 'chordSix', '7': 'chordSeven', 'M7': 'chordMajSeven',
-            '+5': 'chordAug', '-5': 'chordMinusFive', '(9)': 'chordNine', '(-9)': 'chordMinusNine',
-            '(+9)': 'chordAddNine', '(11)': 'chordEleven', '(+11)': 'chordAddEleven', '(13)': 'chordThirteen',
-            '(-13)': 'chordMinusThirteen', 'sus4': 'chordSusFour', 'omit3': 'chordOmitThree', 'moit5': 'chordOmitFive'
+            '+5': 'chordAug', '-5': 'chordMinusFive', 'add2': 'chordAddTwo', '(9)': 'chordNine',
+            '(-9)': 'chordMinusNine', '(+9)': 'chordAddNine', '(11)': 'chordEleven', '(+11)': 'chordAddEleven',
+            '(13)': 'chordThirteen', '(-13)': 'chordMinusThirteen', 'sus2': 'chordSusTwo', 'sus4': 'chordSusFour',
+            'omit3': 'chordOmitThree', 'moit5': 'chordOmitFive'
         },
         chordInput: "",
         chordVar: null,
@@ -540,17 +544,13 @@ var app = new Vue({
             let struct = chordlibs.struct(this.chordInput);
             if (struct) {
                 this.clearKey()
-                let tones = []
                 struct.tones.map(function (item, index) {
-                    if (index < struct.tones.indexOf(0)) {
-                        tones.push(item + 27)
+                    if (index < struct.tones.indexOf(struct.root)) {
                         app.touchKey(item + 27, false)
                     } else {
-                        tones.push(item + 39)
                         app.touchKey(item + 39, false)
                     }
                 })
-                console.log(tones)
             }
         },
         initKeyboard() {

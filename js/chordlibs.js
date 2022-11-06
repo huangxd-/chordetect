@@ -3,7 +3,7 @@ const chordlibs = {};
 // return chord name
 chordlibs.name = function(tones, keyOffset, is_sharp)
 {
-    let complex = 0; //複雑さ
+    let complex = 0; // complexity
 
     // tone name
     const tonename = function(tone)
@@ -38,8 +38,27 @@ chordlibs.name = function(tones, keyOffset, is_sharp)
         }, []);
     };
 
+    // get min distance M2 and m3 for judge add2 and add9
+    const intervalM2AndM3 = function(root, tones)
+    {
+        let maxDis = 0
+        for (const a of tones) {
+            if ((a - root + 12) % 12 === 2) {
+                for (const b of tones) {
+                    if ((b - root + 12) % 12 === 4) {
+                        let tmp = Math.abs(a - b)
+                        if (tmp > maxDis) {
+                            maxDis = tmp
+                        }
+                    }
+                }
+            }
+        }
+        return maxDis
+    }
+
     // take out the 3rd and 5th (is there an elegant way to write it?...?)
-    const factorize = function(incl)
+    const factorize = function(incl, root, tones)
     {
         let triad = {};
 
@@ -50,6 +69,11 @@ chordlibs.name = function(tones, keyOffset, is_sharp)
             triad.third = 4;
             if (incl[7]) {          // M3 + P5
                 triad.fifth = 7;
+                if (incl[2] && intervalM2AndM3(root, tones) === 2) {
+                    triad.opt = "add2";
+                    complex++;
+                    incl[2] = false;
+                }
             } else if(incl[8]) {  // M3 + aug5
                 triad.fifth = 8;
             } else if(incl[6]) {  // M3 + dim5 (complicated)
@@ -78,6 +102,10 @@ chordlibs.name = function(tones, keyOffset, is_sharp)
                 triad.opt = "sus4";
                 complex++;
                 incl[5] = false;
+            } else if (incl[2]) {
+                triad.opt = "sus2";     // P5 + M2
+                complex++;
+                incl[2] = false;
             } else {
                 triad.opt = "omit3";
                 complex += 3;
@@ -153,7 +181,7 @@ chordlibs.name = function(tones, keyOffset, is_sharp)
             let includings = relatives(root, tones);
 
             // Take out the 3rd and 5th
-            let triad = factorize(includings);
+            let triad = factorize(includings, root, tones);
             if (!triad.third && !triad.fifth) return;
 
             // chord name

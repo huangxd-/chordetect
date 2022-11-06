@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" type="text/css" href="css/piano.css" />
     <link rel="stylesheet" type="text/css" href="css/iview.css" />
+    <link rel="stylesheet" type="text/css" href="css/chord_namer.css" />
 
     <script src="js/webmidi.js"></script>
     <script src="js/vue.js"></script>
@@ -26,6 +27,7 @@
     <script src="js/vue-i18n.min.js"></script>
     <script src="js/chordlibs.js"></script>
     <script src="js/chord_name.js"></script>
+    <script src="js/gtform.js"></script>
     <script src="js/vue-metronome.js"></script>
 </head>
 <body>
@@ -165,7 +167,20 @@
         <Checkbox class="chordCheckbox" v-model="chordOmitFive" border>omit5</Checkbox>
     </Modal>
     <Modal v-model="modalGuitarPanel" draggable sticky scrollable :mask="false" :title="$t('guitarPanel')" :footer-hide="true" @on-visible-change="changeModalGuitarPanel">
+        <div class="gtform content_wrap">
+            <div id="chord_template" class="chord">
+                <table class="onko">
+                    <tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr>
+                    <tr><td></td><td></td><td></td><td></td></tr>
+                </table>
+                <div class="point">1</div>
+                <div class="min">1</div>
+            </div>
 
+            <div id="chforms"></div>
+            <Divider :dashed="true"></Divider>
+        </div>
     </Modal>
     <Modal v-model="modalMetronomePanel" draggable sticky scrollable :mask="false" :title="$t('metronome')" :footer-hide="true" @on-visible-change="changeModalMetronomePanel">
         <metronome-view id="metronomeView" :intf="intf"></metronome-view>

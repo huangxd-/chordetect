@@ -1,0 +1,68 @@
+.content_wrap {
+    clear: left;
+    width: 100%;
+}
+
+.gtform {
+    min-height: 25px;
+}
+
+.guitar table {
+    border-spacing: 0;
+}
+
+.gtform .onko {
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin: 3px 0 3px 8px;
+}
+
+.gtform .onko td {
+    font-size: 10px;
+    width: 11px;
+    height: 7px;
+    border: 1px solid gray;
+    margin: 0;
+    padding: 0;
+    background-color: #fe7;
+}
+
+.gtform .onko td span {
+    position: absolute;
+}
+
+.gtform .chord {
+    position: relative;
+    background-color: #fef;
+    width: 60px;
+    height: 52px;
+    font-size: 7pt;
+    line-height: 6px;
+    float: left;
+    margin: 5px 0 0 5px;
+    display: none;
+    cursor: pointer;
+}
+
+.gtform .chord .s {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    line-height: 6px;
+    background-color: #f44;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.gtform .min {
+    position: absolute;
+    left: 12px;
+    bottom: 0;
+    height: 8px;
+}
+
+.gtform .point {
+    float: right;
+    color: red;
+    display: none;
+}

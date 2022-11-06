@@ -848,6 +848,14 @@ var app = new Vue({
                 this.keyNames = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"]
             }
             this.chordNames = chordlibs.name(tones, this.keyOffsets[this.modelKeySignature], is_sharp)
+
+            // guitar chord diagram
+            if (this.chordNames.length > 0) {
+                let struct = chordlibs.struct(this.chordNames[0].name);
+                if (struct) {
+                    c2g.show_form(struct.tones, "chforms");
+                }
+            }
         },
 
         clearKey() {

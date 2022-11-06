@@ -116,9 +116,33 @@
                 </Row>
             </i-tab-pane>
             <i-tab-pane :label="$t('other')" name="tab4">
-                <p>帮助文档</p>
-                <p>github地址</p>
-                <p>捐献</p>
+                <div>
+                    <span>{{ $t('github') }}</span>:
+                    <Tooltip :content="$t('githubHint')" placement="right">
+                        <i-button class="otherBtn" shape="circle" icon="logo-github" to="https://github.com/huangxd-/chordetect.git" target="_blank"></i-button>
+                    </Tooltip>
+                </div>
+                <br>
+                <div>
+                    <span>{{ $t('helpDoc') }}</span>:
+                    <Tooltip content="WIKI" placement="right">
+                        <i-button class="otherBtn" shape="circle" icon="md-help-circle" to="https://github.com/huangxd-/chordetect/wiki" target="_blank"></i-button>
+                    </Tooltip>
+                </div>
+                <br>
+                <div>
+                    <span>{{ $t('donate') }}</span>:
+                    <Tooltip :content="$t('donateHint')" placement="right">
+                        <i-button class="otherBtn" shape="circle" icon="logo-bitcoin" @click="modalDonate = true"></i-button>
+                    </Tooltip>
+                </div>
+                <br>
+                <div>
+                    <span>{{ $t('wechatGroup') }}</span>:
+                    <Tooltip :content="$t('wechatGroupHint')" placement="right">
+                        <i-button class="otherBtn" shape="circle" icon="ios-chatbubbles" @click="modalGroup = true"></i-button>
+                    </Tooltip>
+                </div>
             </i-tab-pane>
         </i-tabs>
     </Modal>
@@ -225,6 +249,17 @@
         <i-button id="metronomeBtn" type="primary" shape="circle" v-bind:icon="metronomeBtnIcon" @click="start_clickHandler">
             <span>{{ playing? $t('stop') : $t('start') }}</span>
         </i-button>
+    </Modal>
+
+    <Modal v-model="modalDonate" draggable sticky scrollable :mask="false" :title="$t('donate')" :footer-hide="true" align="center">
+        <img class="payImage" src="img/wechatpay.jpeg"/>
+        <img class="payImage" src="img/alipay.jpeg"/>
+    </Modal>
+
+    <Modal v-model="modalGroup" draggable sticky scrollable :mask="false" :title="$t('wechatGroup')" :footer-hide="true" align="center">
+        <img class="payImage" src="img/wechatgroup.jpeg"/>
+        <br>
+        <span>{{ $t('invalidGroupHint') }}</span>
     </Modal>
 
     <div v-if="errorMessage" class="error">

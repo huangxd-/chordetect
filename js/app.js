@@ -339,6 +339,8 @@ var app = new Vue({
         chordVar: null,
         chordOptions: null,
         chordChecks: null,
+        modalDonate: false,
+        modalGroup: false,
     },
     created: function () {
         this.scorePanelWidth = scorePanelBaseWidthHeight * this.scorePanelScale

@@ -82,6 +82,18 @@ body {
     margin-left: 20px;
 }
 
+.otherBtn {
+    margin-left: 20px;
+}
+
+.otherBtn .ivu-icon {
+    font-size: 20px;
+}
+
+.payImage {
+    width: 240px;
+}
+
 #metronomeView {
     display: block;
     margin: 0 auto;

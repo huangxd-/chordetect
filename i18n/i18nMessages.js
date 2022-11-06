@@ -71,6 +71,14 @@ const i18nMessages = {
 		'properties': '属性',
 		'pleaseInputChord': '请输入和弦',
 		'incorrectChordMark': '不正确的和弦标记?: ',
+		'github': 'Github地址',
+		'helpDoc': '帮助文档',
+		'donate': '捐献',
+		'wechatGroup': '微信群',
+		'githubHint': '欢迎关注、加星',
+		'donateHint': '开发不易, 为爱发电, 赠杯奶茶 : )',
+		'wechatGroupHint': '欢迎加群交流',
+		'invalidGroupHint': '若二维码失效, 请加微信 h649924757xd , 再拉入群',
 	},
 	'en_US': {
 		'settings': 'Settings',
@@ -141,6 +149,14 @@ const i18nMessages = {
 		'slashChord': 'SlashChord',
 		'properties': 'Properties',
 		'pleaseInputChord': 'please input chord',
-		'incorrectChordMark': 'Incorrect chord mark?: '
+		'incorrectChordMark': 'Incorrect chord mark?: ',
+		'github': 'Github Address',
+		'helpDoc': 'Help Doc',
+		'donate': 'Donate',
+		'wechatGroup': 'Wechat Group',
+		'githubHint': 'Welcome to follow and star',
+		'donateHint': 'Give a cup of milk tea : )',
+		'wechatGroupHint': 'Welcome to join the group communication',
+		'invalidGroupHint': 'If the QR code is invalid, please add WeChat h649924757xd , and then join the group',
 	}
 }

@@ -126,6 +126,7 @@ c2g.show_form = (tones, id) => {
     $c("gtform")[0].style.display = "";
     $id("inchord").style.display = "";
     $id(id).innerText = "";
+
     if (tones.length > 0) {
         guitarform(tones).map(v => {
             let fret = v.form;
@@ -156,8 +157,6 @@ c2g.show_form = (tones, id) => {
             });
         });
     }
-
-
 };
 
 window.onload = function() {

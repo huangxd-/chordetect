@@ -126,35 +126,38 @@ c2g.show_form = (tones, id) => {
     $c("gtform")[0].style.display = "";
     $id("inchord").style.display = "";
     $id(id).innerText = "";
+    if (tones.length > 0) {
+        guitarform(tones).map(v => {
+            let fret = v.form;
+            let $chord = $id("chord_template").cloneNode(true);
+            $chord.style.display = "block";
+            $id(id).appendChild($chord);
 
-    guitarform(tones).map(v => {
-        let fret = v.form;
-        let $chord = $id("chord_template").cloneNode(true);
-        $chord.style.display = "block";
-        $id(id).appendChild($chord);
+            let min = fret.reduce((min, v) => ((0 < v) && (min == -1 || v < min) ? v : min), -1);
+            if (0 < min) $chord.getElementsByClassName("min")[0].innerText = (min);
+            $chord.getElementsByClassName("point")[0].innerText = (v.eval);
 
-        let min = fret.reduce((min, v) => ((0 < v) && (min == -1 || v < min) ? v : min), -1);
-        if (0 < min) $chord.getElementsByClassName("min")[0].innerText = (min);
-        $chord.getElementsByClassName("point")[0].innerText = (v.eval);
+            fret.map((val, index) => {
+                let $span = document.createElement("span");
+                let $div = document.createElement("div");
+                let row = (index == 0) ? 4 : (5 - index);
+                $div.style.top = ((index == 0) ? 0 : -7) + "px";
+                let col = (0 < val) ? (val - min) : 0;
+                $div.style.left = ((0 < val) ? 3 : -9) + "px";
+                $div.classList.add("s");
 
-        fret.map((val, index) => {
-            let $span = document.createElement("span");
-            let $div = document.createElement("div");
-            let row = (index == 0) ? 4 : (5 - index);
-            $div.style.top = ((index == 0) ? 0 : -7) + "px";
-            let col = (0 < val) ? (val - min) : 0;
-            $div.style.left = ((0 < val) ? 3 : -9) + "px";
-            $div.classList.add("s");
+                $chord.querySelectorAll(".onko tr")[row].children[col].appendChild($span);
+                $span.appendChild($div);
 
-            $chord.querySelectorAll(".onko tr")[row].children[col].appendChild($span);
-            $span.appendChild($div);
-
-            if (val < 0) {
-                $div.style["background-color"] = "transparent";
-                $div.innerText = "X";
-            }
+                if (val < 0) {
+                    $div.style["background-color"] = "transparent";
+                    $div.innerText = "X";
+                }
+            });
         });
-    });
+    }
+
+
 };
 
 window.onload = function() {

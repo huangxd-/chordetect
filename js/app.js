@@ -857,6 +857,8 @@ var app = new Vue({
                 if (struct) {
                     c2g.show_form(struct.tones, "chforms");
                 }
+            } else {
+                c2g.show_form([], "chforms");
             }
         },
 

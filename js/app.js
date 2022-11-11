@@ -874,6 +874,10 @@ var app = new Vue({
                 this.keyMode = "MIDI"
                 this.holdPedal = false
                 this.showResetBtn = false
+
+                this.refreshScore()
+
+                this.genChords()
             }
         },
 

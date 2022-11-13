@@ -11,7 +11,7 @@ Chordetect面向音乐爱好者/音乐类博主/音乐类学生等，致力于�
 
 [Demo](https://chordetect.dongdongbo.cn)
 
-![](https://gitee.com/huangxd/imges/raw/master/pycharm/V7aDf7.png)
+![](https://gitee.com/huangxd/imges/raw/master/pycharm/KR2jE8.png)
 
 ## 设计初衷
 

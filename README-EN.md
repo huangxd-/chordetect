@@ -10,7 +10,7 @@ Chordetect is aimed at music lovers/music bloggers/music students, etc., and is 
 
 [Demo](https://chordetect.dongdongbo.cn)
 
-![](https://gitee.com/huangxd/imges/raw/master/pycharm/iYaXan.png)
+![](https://gitee.com/huangxd/imges/raw/master/pycharm/KR2jE8.png)
 
 ## The original intention of the design
 

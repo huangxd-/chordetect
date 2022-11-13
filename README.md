@@ -2,6 +2,7 @@ Chordetect
 ============
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![](https://img.shields.io/badge/README-ENGLISH-blue.svg)](https://github.com/huangxd-/chordetect/blob/main/README-EN.md)
 
 **Chordetect是一个钢琴/吉他和弦识别工具。**
 
@@ -55,6 +56,17 @@ Chordetect面向音乐爱好者/音乐类博主/音乐类学生等，致力于�
 - 获得开发者响应的最快方式是加入我们的微信群进行在线讨论。
 - 群二维码容易失效, 请加微信 h649924757xd , 再拉入群。
 - 可以在群里向我反馈问题或提需求，也可以直接在 [github issues](https://github.com/huangxd-/chordetect/issues) 上进行反馈
+
+大自然的搬运工
+============
+* [vexflow](https://github.com/0xfe/vexflow): 一个用于渲染音乐符号和吉他指法谱的 JavaScript 库
+* [webmidi](https://github.com/djipco/webmidi): 用于控制 Web MIDI API。轻松发送和接收 MIDI 信息。具有用户友好功能的控制仪表。使用简单的事件监听器对 MIDI 输入做出反应
+* [WebMidiPiano](https://github.com/b-viguier/WebMidiPiano): 在线屏幕 MIDI 钢琴
+* [MIDI.js](https://github.com/mudcube/MIDI.js): 在网页上轻松创建一个 MIDI 应用程序。包括一个库，用于将通感编程到您的应用程序中，记忆识别或创建幻觉效果。为吉他、贝斯、鼓等转换声音源。变成浏览器可以读取的代码。支持多种同时乐器和完美的计时
+* [chordnamer](https://github.com/symtkhr/chordnamer): 和弦识别工具
+* [vue-metronome](https://github.com/kazuhikoarase/vue-metronome): 用 vue 写的节拍器
+* [vue](https://github.com/vuejs/vue): Vue.js 是一个渐进式、可增量采用的 JavaScript 框架，用于在 Web 上构建 UI
+* [iview](https://github.com/iview/iview): 基于 Vue.js 2.0 构建的高质量 UI 工具包
 
 许可证
 ============

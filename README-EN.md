@@ -25,6 +25,7 @@ Chordetect is aimed at music lovers/music bloggers/music students, etc., and is 
   - Support mouse click or touch screen keyboard input to recognize chords
   - Support keyboard color setting (can be set separately when the pedal is pressed and not pressed, and there are colorful modes)
   - Support for actively setting chord flats and sharps
+  - Support Roman numerals chord progression display, and change with key signature
 
 - **Chord Dictionary**
   - Support text input or multi-select box to select the chord you want to find

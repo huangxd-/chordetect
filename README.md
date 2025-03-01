@@ -9,7 +9,7 @@ Chordetect
 Chordetect面向音乐爱好者/音乐类博主/音乐类学生等，致力于提供便捷的全端音乐工具。既可作为学习和弦的助手，也可作为音源接入MIDI键盘。用户只需打开浏览器连接MIDI键盘就可使用，
 并支持和弦识别/音源连接/节拍器等主要功能。
 
-[Demo](https://chordetect.dongdongbo.cn)
+[Demo](https://chordetect.pages.dev)
 
 ![](https://gitee.com/huangxd/imges/raw/master/pycharm/V7aDf7.png)
 

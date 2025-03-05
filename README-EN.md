@@ -8,7 +8,8 @@ Chordetect
 
 Chordetect is aimed at music lovers/music bloggers/music students, etc., and is committed to providing convenient full-end music tools. It can not only be used as an assistant for learning chords, but also can be connected to a MIDI keyboard as a sound source. Users only need to open the browser to connect the MIDI keyboard to use. And supports major functions such as chord recognition/sound source connection/metronome.
 
-[Demo](https://chordetect.pages.dev)
+[Demo1](https://chordetect.hxd.ip-ddns.com)
+[Demo2](https://chordetect.pages.dev)
 
 ![](https://gitee.com/huangxd/imges/raw/master/pycharm/KR2jE8.png)
 
